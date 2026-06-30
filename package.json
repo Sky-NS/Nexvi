@@ -1,1 +1,9 @@
-{"name":"nexvi","private":true,"version":"0.1.0","type":"module"}
+{
+  "name":"nexvi",
+  "private":true,
+  "version":"0.1.0-alpha1",
+  "type":"module",
+  "scripts":{"dev":"vite","build":"vite build","preview":"vite preview"},
+  "dependencies":{"react":"^19.1.0","react-dom":"^19.1.0"},
+  "devDependencies":{"typescript":"^5","vite":"^7","@vitejs/plugin-react":"^5"}
+}

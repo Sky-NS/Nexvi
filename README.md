@@ -1,2 +1,2 @@
-# Nexvi
-AI Travel Companion
+# Nexvi Alpha1
+Initial project scaffold.
