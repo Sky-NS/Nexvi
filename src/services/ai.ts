@@ -30,7 +30,7 @@ export interface GenerationParams {
 export async function generateTripPlan(
   params: GenerationParams,
   apiKey: string,
-  provider: 'openai' | 'gemini' = 'openai'
+  provider: 'openai' | 'gemini' | 'deepseek' = 'openai'
 ): Promise<{ destination?: string; days?: any[] }> {
   const days = eachDayOfInterval({
     start: new Date(params.startDate),
@@ -75,6 +75,22 @@ export async function generateTripPlan(
         temperature: 0.7,
       }),
     });
+  } else if (provider === 'deepseek') {
+    response = await fetch('https://api.deepseek.com/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: 'deepseek-chat',
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'user', content: userPrompt },
+        ],
+        temperature: 0.7,
+      }),
+    });
   } else {
     response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
@@ -95,9 +111,9 @@ export async function generateTripPlan(
   }
 
   const data = await response.json();
-  const content = provider === 'openai'
-    ? data.choices?.[0]?.message?.content || ''
-    : data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  const content = provider === 'gemini'
+    ? data.candidates?.[0]?.content?.parts?.[0]?.text || ''
+    : data.choices?.[0]?.message?.content || '';
 
   const clean = content.replace(/```json\s*/g, '').replace(/```\s*$/g, '').trim();
 
