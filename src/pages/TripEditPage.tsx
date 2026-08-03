@@ -5,7 +5,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { format, parseISO } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
 import { DayCard } from '@/components/DayCard';
 import { ExportPdfButton } from '@/components/ExportPdfButton';
 import { ArrowLeft, Plus, Save } from 'lucide-react';

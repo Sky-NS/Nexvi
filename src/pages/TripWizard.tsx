@@ -97,7 +97,7 @@ export default function TripWizard() {
               <div className="grid grid-cols-2 gap-2">
                 {TYPES.map((opt) => (
                   <label key={opt.key} className="flex items-center gap-2 p-2 rounded-lg border hover:bg-gray-50 cursor-pointer">
-                    <Checkbox checked={params.preferences[opt.key]} onCheckedChange={(v) => up(opt.key, !!v)} /><span className="text-sm">{opt.label}</span>
+                    <Checkbox checked={params.preferences[opt.key]} onChange={(e: React.ChangeEvent<HTMLInputElement>) => up(opt.key, e.target.checked)} /><span className="text-sm">{opt.label}</span>
                   </label>
                 ))}
               </div>
