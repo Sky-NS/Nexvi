@@ -20,16 +20,17 @@ export default function SettingsPage() {
       <div className="bg-white rounded-xl shadow-sm border p-6 space-y-6">
         <div>
           <Label>Провайдер ИИ</Label>
-          <div className="flex gap-2 mt-2">
+          <div className="flex gap-2 mt-2 flex-wrap">
             <Button variant={provider === 'openai' ? 'default' : 'outline'} onClick={() => setProvider('openai')}>OpenAI</Button>
             <Button variant={provider === 'gemini' ? 'default' : 'outline'} onClick={() => setProvider('gemini')}>Gemini</Button>
+            <Button variant={provider === 'deepseek' ? 'default' : 'outline'} onClick={() => setProvider('deepseek')}>DeepSeek</Button>
           </div>
         </div>
         <div>
           <Label>API-ключ</Label>
           <div className="flex gap-2 mt-2">
             <div className="relative flex-1">
-              <Input type={show ? 'text' : 'password'} placeholder="sk-... или ключ Gemini" value={apiKey} onChange={(e) => setApiKey(e.target.value)} />
+              <Input type={show ? 'text' : 'password'} placeholder={provider === 'deepseek' ? 'sk-... (DeepSeek)' : provider === 'gemini' ? 'Ключ Gemini' : 'sk-... (OpenAI)'} value={apiKey} onChange={(e) => setApiKey(e.target.value)} />
               <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">{show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}</button>
             </div>
             {apiKey && <Button variant="destructive" size="icon" onClick={resetApiKey}><Trash2 className="w-4 h-4" /></Button>}
