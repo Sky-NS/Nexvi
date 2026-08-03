@@ -3,9 +3,9 @@ import { persist } from 'zustand/middleware';
 
 interface SettingsState {
   apiKey: string;
-  provider: 'openai' | 'gemini';
+  provider: 'openai' | 'gemini' | 'deepseek';
   setApiKey: (key: string) => void;
-  setProvider: (p: 'openai' | 'gemini') => void;
+  setProvider: (p: 'openai' | 'gemini' | 'deepseek') => void;
   resetApiKey: () => void;
 }
 
