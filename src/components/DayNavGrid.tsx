@@ -25,13 +25,14 @@ export function DayNavGrid({ days }: Props) {
           key={day.dayNumber}
           type="button"
           onClick={() => jumpTo(day.dayNumber)}
+          aria-label={t('day.label', { n: day.dayNumber, title: day.title || '—' })}
           className="text-left bg-white border rounded-lg p-3 hover:border-gray-400 hover:shadow-sm transition-all"
         >
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center justify-center gap-1.5">
             <span className="text-lg leading-none shrink-0" aria-hidden>{day.icon || '📍'}</span>
             <span className="text-xs text-gray-400">{format(parseISO(day.date), 'd MMM', { locale })}</span>
           </div>
-          <div className="text-sm font-medium line-clamp-1 mt-0.5">{t('day.label', { n: day.dayNumber, title: day.title || '—' })}</div>
+          <div className="text-sm font-medium line-clamp-1 mt-1 text-left">{day.title || '—'}</div>
         </button>
       ))}
     </div>
