@@ -9,6 +9,8 @@ export interface Activity {
   hours?: string;
   booked?: boolean;
   bookingNote?: string;
+  icon?: string;
+  photo?: string;
 }
 
 export interface RouteLeg {
@@ -23,6 +25,7 @@ export interface DayPlan {
   dayNumber: number;
   date: string;
   title: string;
+  icon?: string;
   route: RouteLeg[];
   activities: Activity[];
 }
