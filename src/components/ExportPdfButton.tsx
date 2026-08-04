@@ -15,7 +15,6 @@ export function ExportPdfButton({ trip }: Props) {
     doc.setFontSize(12);
     doc.text(`${format(parseISO(trip.startDate), 'd MMMM yyyy', { locale: ru })} — ${format(parseISO(trip.endDate), 'd MMMM yyyy', { locale: ru })}`, 20, y); y += 10;
     doc.text(`Путешественников: ${trip.travelers}`, 20, y); y += 15;
-
     trip.days.forEach((day) => {
       if (y > 270) { doc.addPage(); y = 20; }
       doc.setFontSize(14);
