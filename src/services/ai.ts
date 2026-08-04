@@ -32,7 +32,7 @@ const SYSTEM_PROMPT = `Ты — профессиональный туристи�
 12. Логичное перемещение между локациями (не гонять туда-сюда по городу).
 13. Учитывай время работы мест (не предлагай музеи в 23:00).
 14. "currency" — один символ или код валюты страны назначения (например ¥, €, $, ₩), используй его для ВСЕХ числовых cost-полей ниже.
-15. "route" — список переходов между точками за день (включая от жилья и обратно), с примерным способом передвижения и стоимостью в местной валюте. Пешком/бесплатно — cost: 0.
+15. "route" — список переходов между точками за день (включая от жилья и обратно), не более 4 переходов, с примерным способом передвижения и стоимостью в местной валюте. Пешком/бесплатно — cost: 0.
 16. "cost" у активности — примерная стоимость входа/участия в местной валюте, числом, без символа и без диапазонов. Бесплатно — 0.
 17. "hours" у активности — часы работы, если применимо (например "9:00–18:00"), иначе не указывай.
 18. НЕ придумывай номера бронирований, места в транспорте и т.п. — это добавит сам пользователь после реального бронирования.
@@ -83,8 +83,60 @@ function extractJson(text: string): string {
   const lastBrace = clean.lastIndexOf('}');
   if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
     clean = clean.slice(firstBrace, lastBrace + 1);
+  } else if (firstBrace !== -1) {
+    // No closing brace at all — the response was almost certainly cut off mid-JSON.
+    clean = clean.slice(firstBrace);
   }
   return clean;
+}
+
+// Best-effort repair for a response that got truncated (e.g. hit the token
+// limit) before its brackets were closed. Walks the string once, and at every
+// safe boundary outside a string literal ('{', '[', '}', ']', ',') records a
+// candidate cut point together with the exact closing brackets needed to
+// balance the JSON at that moment. Then tries candidates from the latest
+// (most information kept) back to the earliest, actually validating each one
+// with JSON.parse, and returns the first that parses — i.e. the truncated
+// trailing member (an in-progress activity, route leg, etc.) gets dropped
+// rather than guessed at.
+function closeUnbalancedJson(text: string): string | null {
+  let inString = false;
+  let escaped = false;
+  const stack: string[] = [];
+  const candidates: { pos: number; closers: string }[] = [];
+
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (inString) {
+      if (escaped) escaped = false;
+      else if (ch === '\\') escaped = true;
+      else if (ch === '"') inString = false;
+      continue;
+    }
+    if (ch === '"') { inString = true; continue; }
+    if (ch === '{' || ch === '[') {
+      stack.push(ch === '{' ? '}' : ']');
+      candidates.push({ pos: i + 1, closers: stack.slice().reverse().join('') });
+    } else if (ch === '}' || ch === ']') {
+      stack.pop();
+      candidates.push({ pos: i + 1, closers: stack.slice().reverse().join('') });
+    } else if (ch === ',') {
+      candidates.push({ pos: i, closers: stack.slice().reverse().join('') });
+    }
+  }
+
+  if (stack.length === 0) return null;
+
+  for (let k = candidates.length - 1; k >= 0; k--) {
+    const attempt = text.slice(0, candidates[k].pos) + candidates[k].closers;
+    try {
+      JSON.parse(attempt);
+      return attempt;
+    } catch {
+      // try an earlier, less-truncated candidate
+    }
+  }
+  return null;
 }
 
 export async function generateTripPlan(
@@ -161,7 +213,7 @@ export async function generateTripPlan(
             { role: 'system', content: SYSTEM_PROMPT },
             { role: 'user', content: userPrompt },
           ],
-          max_tokens: 4000,
+          max_tokens: 12000,
           temperature: 0.7,
         }),
       });
@@ -179,7 +231,7 @@ export async function generateTripPlan(
             { role: 'system', content: SYSTEM_PROMPT },
             { role: 'user', content: userPrompt },
           ],
-          max_tokens: 4000,
+          max_tokens: 12000,
           temperature: 0.7,
         }),
       });
@@ -192,7 +244,7 @@ export async function generateTripPlan(
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             contents: [{ parts: [{ text: SYSTEM_PROMPT + '\n\n' + userPrompt }] }],
-            generationConfig: { temperature: 0.7, maxOutputTokens: 4000 },
+            generationConfig: { temperature: 0.7, maxOutputTokens: 12000 },
           }),
         }
       );
@@ -216,6 +268,16 @@ export async function generateTripPlan(
   try {
     return JSON.parse(clean);
   } catch {
+    const repaired = closeUnbalancedJson(clean);
+    if (repaired) {
+      try {
+        return JSON.parse(repaired);
+      } catch {
+        // fall through to the diagnostic + error below
+      }
+    }
+    // eslint-disable-next-line no-console
+    console.error('Nexvi: не удалось разобрать ответ ИИ как JSON. Сырой ответ модели:', content);
     throw new Error('Нейросеть вернула некорректный формат. Попробуйте снова.');
   }
 }
