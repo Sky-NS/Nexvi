@@ -91,7 +91,7 @@ export default function TripWizard() {
         travelers: params.travelers, budget: params.budget as any, currency: plan.currency, preferences: params.preferences,
         days: plan.days?.map((d: any, i: number) => ({
           dayNumber: d.dayNumber || i + 1, date: d.date || format(parseISO(params.startDate), 'yyyy-MM-dd'),
-          title: d.title || `День ${i + 1}`,
+          title: d.title || `День ${i + 1}`, icon: d.icon || '📍',
           route: Array.isArray(d.route) ? d.route.map((r: any) => ({
             id: uuidv4(), from: r.from || '', to: r.to || '', mode: r.mode || '',
             cost: typeof r.cost === 'number' ? r.cost : undefined,
@@ -100,7 +100,7 @@ export default function TripWizard() {
             id: uuidv4(), time: a.time || '09:00', title: a.title || 'Активность',
             description: a.description || '', location: a.location || '', notes: a.notes || '',
             cost: typeof a.cost === 'number' ? a.cost : undefined, hours: a.hours || '',
-            booked: false, bookingNote: '',
+            icon: a.icon || '📍', booked: false, bookingNote: '',
           })) || [],
         })) || [],
         createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
