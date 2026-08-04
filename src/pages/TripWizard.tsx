@@ -5,6 +5,7 @@ import { format, parseISO } from 'date-fns';
 import { useTripStore } from '@/store/tripStore';
 import { useSettingsStore } from '@/store/settingsStore';
 import { generateTripPlan, GenerationParams } from '@/services/ai';
+import { attachWikipediaPhotos } from '@/services/wikipedia';
 import { Trip, TripPreferences } from '@/types/trip';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -116,6 +117,7 @@ export default function TripWizard() {
         })) || [],
         createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
       };
+      await attachWikipediaPhotos(trip, language);
       addTrip(trip); setCurrentTrip(trip); navigate(`/trip/${trip.id}`);
     } catch (e: any) { setError(e.message || t('wizard.error.generic')); } finally { setLoading(false); }
   };
