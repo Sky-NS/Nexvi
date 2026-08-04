@@ -29,6 +29,10 @@ const ru: TranslationDict = {
   'limit.gotIt': 'Понятно, удалю поездку',
   'limit.subscribe': 'Оформить подписку (скоро)',
 
+  'noKey.title': 'Нужен API-ключ',
+  'noKey.body': 'Чтобы сгенерировать план поездки, сначала добавьте API-ключ ИИ-провайдера в настройках.',
+  'noKey.goToSettings': 'Перейти в настройки',
+
   'wizard.title': 'Новая поездка',
   'wizard.step1.heading': 'Шаг 1: Параметры поездки',
   'wizard.destination': 'Место назначения',
@@ -180,6 +184,10 @@ const en: TranslationDict = {
   'limit.body': 'Up to {max} saved trips are available for free. Delete an existing one, or subscribe to create more.',
   'limit.gotIt': "Got it, I'll delete a trip",
   'limit.subscribe': 'Subscribe (coming soon)',
+
+  'noKey.title': 'An API key is needed',
+  'noKey.body': "To generate a trip plan, first add your AI provider's API key in Settings.",
+  'noKey.goToSettings': 'Go to Settings',
 
   'wizard.title': 'New trip',
   'wizard.step1.heading': 'Step 1: Trip details',
