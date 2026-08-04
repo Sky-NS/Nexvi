@@ -1,6 +1,6 @@
 export interface Activity {
   id: string;
-  time: string;
+  time?: string;
   title: string;
   description: string;
   location: string;
@@ -42,7 +42,8 @@ export interface TripPreferences {
   pace: 'relaxed' | 'moderate' | 'packed';
   interests: string[];
   travelGroup: 'solo' | 'couple' | 'family' | 'group';
-  transportation: 'walking' | 'public' | 'car';
+  transportation: 'walking' | 'public' | 'car' | 'rental';
+  wishes?: string;
 }
 
 export interface Trip {
