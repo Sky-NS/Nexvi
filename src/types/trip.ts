@@ -25,6 +25,8 @@ export interface TripPreferences {
   nature: boolean;
   pace: 'relaxed' | 'moderate' | 'packed';
   interests: string[];
+  travelGroup: 'solo' | 'couple' | 'family' | 'group';
+  transportation: 'walking' | 'public' | 'car';
 }
 
 export interface Trip {
