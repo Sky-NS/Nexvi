@@ -5,12 +5,25 @@ export interface Activity {
   description: string;
   location: string;
   notes: string;
+  cost?: number;
+  hours?: string;
+  booked?: boolean;
+  bookingNote?: string;
+}
+
+export interface RouteLeg {
+  id: string;
+  from: string;
+  to: string;
+  mode: string;
+  cost?: number;
 }
 
 export interface DayPlan {
   dayNumber: number;
   date: string;
   title: string;
+  route: RouteLeg[];
   activities: Activity[];
 }
 
@@ -36,6 +49,7 @@ export interface Trip {
   endDate: string;
   travelers: number;
   budget?: 'economy' | 'comfort' | 'premium';
+  currency?: string;
   preferences: TripPreferences;
   days: DayPlan[];
   createdAt: string;
