@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTripStore } from '@/store/tripStore';
+import { useSettingsStore } from '@/store/settingsStore';
 import { TripCard } from '@/components/TripCard';
 import { TripLimitDialog } from '@/components/TripLimitDialog';
+import { NoApiKeyDialog } from '@/components/NoApiKeyDialog';
 import { Button } from '@/components/ui/Button';
 import { useTranslation } from '@/i18n/LanguageContext';
 import { Plus, Settings, Plane } from 'lucide-react';
@@ -15,9 +17,12 @@ export default function HomePage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { trips, deleteTrip, setCurrentTrip } = useTripStore();
+  const { apiKey } = useSettingsStore();
   const [showLimitDialog, setShowLimitDialog] = useState(false);
+  const [showNoKeyDialog, setShowNoKeyDialog] = useState(false);
 
   const handleCreate = () => {
+    if (!apiKey) { setShowNoKeyDialog(true); return; }
     if (trips.length >= MAX_FREE_TRIPS) { setShowLimitDialog(true); return; }
     navigate('/wizard');
   };
@@ -57,6 +62,7 @@ export default function HomePage() {
       )}
 
       {showLimitDialog && <TripLimitDialog max={MAX_FREE_TRIPS} onClose={() => setShowLimitDialog(false)} />}
+      {showNoKeyDialog && <NoApiKeyDialog onClose={() => setShowNoKeyDialog(false)} />}
     </div>
   );
 }
