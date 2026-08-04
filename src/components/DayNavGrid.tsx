@@ -15,7 +15,10 @@ export function DayNavGrid({ days }: Props) {
           href={`#day-${day.dayNumber}`}
           className="bg-white border rounded-lg p-3 hover:border-gray-400 hover:shadow-sm transition-all"
         >
-          <div className="text-xs text-gray-400">{format(parseISO(day.date), 'd MMM', { locale: ru })}</div>
+          <div className="flex items-center gap-1.5">
+            <span className="text-lg leading-none shrink-0" aria-hidden>{day.icon || '📍'}</span>
+            <span className="text-xs text-gray-400">{format(parseISO(day.date), 'd MMM', { locale: ru })}</span>
+          </div>
           <div className="text-sm font-medium line-clamp-1 mt-0.5">День {day.dayNumber}: {day.title || '—'}</div>
         </a>
       ))}

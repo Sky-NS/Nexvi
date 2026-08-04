@@ -30,7 +30,15 @@ export function DayCard(props: Props) {
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
             <Label className="text-xs text-gray-500">День {day.dayNumber}</Label>
-            <Input value={day.title} onChange={(e) => onUpdateDay((d) => ({ ...d, title: e.target.value }))} className="font-semibold text-lg border-0 px-0 focus-visible:ring-0" placeholder="Заголовок дня" />
+            <div className="flex items-center gap-2">
+              <Input
+                value={day.icon || ''}
+                onChange={(e) => onUpdateDay((d) => ({ ...d, icon: e.target.value }))}
+                placeholder="📍"
+                className="w-11 h-9 text-center text-base shrink-0 px-0"
+              />
+              <Input value={day.title} onChange={(e) => onUpdateDay((d) => ({ ...d, title: e.target.value }))} className="font-semibold text-lg border-0 px-0 focus-visible:ring-0 flex-1 min-w-0" placeholder="Заголовок дня" />
+            </div>
           </div>
           <div>
             <Label className="text-xs text-gray-500">Дата</Label>
