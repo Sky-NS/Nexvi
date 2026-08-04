@@ -1,12 +1,26 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTripStore } from '@/store/tripStore';
 import { TripCard } from '@/components/TripCard';
+import { TripLimitDialog } from '@/components/TripLimitDialog';
 import { Button } from '@/components/ui/Button';
+import { useTranslation } from '@/i18n/LanguageContext';
 import { Plus, Settings, Plane } from 'lucide-react';
+
+// Free-tier cap. Bump this (or wire it to a real plan lookup) once paid
+// subscriptions exist.
+const MAX_FREE_TRIPS = 3;
 
 export default function HomePage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { trips, deleteTrip, setCurrentTrip } = useTripStore();
+  const [showLimitDialog, setShowLimitDialog] = useState(false);
+
+  const handleCreate = () => {
+    if (trips.length >= MAX_FREE_TRIPS) { setShowLimitDialog(true); return; }
+    navigate('/wizard');
+  };
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -15,16 +29,16 @@ export default function HomePage() {
           <div className="w-9 h-9 rounded-xl bg-gray-900 flex items-center justify-center">
             <Plane className="w-4 h-4 text-white" />
           </div>
-          <h1 className="text-xl font-bold">Nexvi</h1>
+          <h1 className="text-xl font-bold">{t('app.name')}</h1>
         </div>
         <Button variant="ghost" size="icon" onClick={() => navigate('/settings')}><Settings className="w-4 h-4" /></Button>
       </div>
 
       {trips.length === 0 ? (
         <div className="text-center py-16 px-6 bg-white rounded-xl border border-dashed">
-          <h2 className="text-xl font-semibold mb-2">Пока нет поездок</h2>
-          <p className="text-sm text-gray-500 mb-6">Опишите направление и стиль поездки — маршрут по дням соберёт ИИ.</p>
-          <Button onClick={() => navigate('/wizard')}><Plus className="w-4 h-4 mr-2" /> Создать поездку</Button>
+          <h2 className="text-xl font-semibold mb-2">{t('home.emptyTitle')}</h2>
+          <p className="text-sm text-gray-500 mb-6">{t('home.emptySubtitle')}</p>
+          <Button onClick={handleCreate}><Plus className="w-4 h-4 mr-2" /> {t('home.createTrip')}</Button>
         </div>
       ) : (
         <>
@@ -38,9 +52,11 @@ export default function HomePage() {
               />
             ))}
           </div>
-          <Button variant="outline" onClick={() => navigate('/wizard')}><Plus className="w-4 h-4 mr-2" /> Новая поездка</Button>
+          <Button variant="outline" onClick={handleCreate}><Plus className="w-4 h-4 mr-2" /> {t('home.newTrip')}</Button>
         </>
       )}
+
+      {showLimitDialog && <TripLimitDialog max={MAX_FREE_TRIPS} onClose={() => setShowLimitDialog(false)} />}
     </div>
   );
 }
