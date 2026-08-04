@@ -1,4 +1,5 @@
 import { Activity } from '@/types/trip';
+import { useTranslation } from '@/i18n/LanguageContext';
 import { MapPin, CheckCircle2, Clock } from 'lucide-react';
 
 interface Props {
@@ -7,6 +8,7 @@ interface Props {
 }
 
 export function ActivityView({ activity, currency }: Props) {
+  const { t } = useTranslation();
   const mapsHref = activity.location ? `https://www.google.com/maps/search/${encodeURIComponent(activity.location)}` : undefined;
 
   return (
@@ -18,15 +20,12 @@ export function ActivityView({ activity, currency }: Props) {
         <div className="flex items-start gap-2.5">
           <span className="text-2xl leading-none shrink-0" aria-hidden>{activity.icon || '📍'}</span>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              {activity.time && <span className="tabular-nums text-sm font-semibold text-gray-500">{activity.time}</span>}
-              {activity.booked && (
-                <span className="inline-flex items-center gap-1 text-xs font-medium text-green-700">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> Забронировано
-                </span>
-              )}
-            </div>
-            <h4 className="font-semibold text-gray-900 leading-snug mt-0.5">{activity.title}</h4>
+            {activity.booked && (
+              <span className="inline-flex items-center gap-1 text-xs font-medium text-green-700 mb-0.5">
+                <CheckCircle2 className="w-3.5 h-3.5" /> {t('activity.booked')}
+              </span>
+            )}
+            <h4 className="font-semibold text-gray-900 leading-snug">{activity.title}</h4>
             {activity.description && <p className="text-sm text-gray-600 mt-1 leading-relaxed">{activity.description}</p>}
 
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-xs text-gray-500">
@@ -43,7 +42,7 @@ export function ActivityView({ activity, currency }: Props) {
               {typeof activity.cost === 'number' && activity.cost > 0 && (
                 <span className="font-medium text-gray-700">{currency}{activity.cost}</span>
               )}
-              {activity.cost === 0 && <span className="font-medium text-green-600">Бесплатно</span>}
+              {activity.cost === 0 && <span className="font-medium text-green-600">{t('common.free')}</span>}
             </div>
 
             {activity.bookingNote && (

@@ -1,6 +1,7 @@
 import { RouteLeg } from '@/types/trip';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
+import { useTranslation } from '@/i18n/LanguageContext';
 import { Plus, Trash2, Route as RouteIcon } from 'lucide-react';
 
 interface Props {
@@ -12,12 +13,13 @@ interface Props {
 }
 
 export function RouteCard({ route, currency, onAdd, onUpdate, onRemove }: Props) {
+  const { t } = useTranslation();
   const total = route.reduce((sum, r) => sum + (r.cost || 0), 0);
 
   return (
     <div className="bg-gray-50 rounded-lg p-3 mb-4">
       <div className="flex items-center gap-2 text-xs font-medium text-gray-500 mb-2">
-        <RouteIcon className="w-3.5 h-3.5" /> МАРШРУТ ДНЯ
+        <RouteIcon className="w-3.5 h-3.5" /> {t('route.heading')}
       </div>
       <div className="space-y-2">
         {route.map((leg, i) => (
@@ -26,14 +28,14 @@ export function RouteCard({ route, currency, onAdd, onUpdate, onRemove }: Props)
               <Input
                 value={leg.from}
                 onChange={(e) => onUpdate(i, (r) => ({ ...r, from: e.target.value }))}
-                placeholder="Откуда"
+                placeholder={t('route.from')}
                 className="text-xs h-8 flex-1 min-w-0"
               />
               <span className="text-gray-300 text-xs shrink-0">→</span>
               <Input
                 value={leg.to}
                 onChange={(e) => onUpdate(i, (r) => ({ ...r, to: e.target.value }))}
-                placeholder="Куда"
+                placeholder={t('route.to')}
                 className="text-xs h-8 flex-1 min-w-0"
               />
             </div>
@@ -41,7 +43,7 @@ export function RouteCard({ route, currency, onAdd, onUpdate, onRemove }: Props)
               <Input
                 value={leg.mode}
                 onChange={(e) => onUpdate(i, (r) => ({ ...r, mode: e.target.value }))}
-                placeholder="Как"
+                placeholder={t('route.mode')}
                 className="text-xs h-8 flex-1 min-w-0"
               />
               <Input
@@ -60,10 +62,10 @@ export function RouteCard({ route, currency, onAdd, onUpdate, onRemove }: Props)
       </div>
       <div className="flex items-center justify-between mt-2">
         <Button variant="ghost" size="sm" onClick={onAdd} className="text-xs text-gray-500">
-          <Plus className="w-3 h-3 mr-1" /> Добавить переход
+          <Plus className="w-3 h-3 mr-1" /> {t('route.add')}
         </Button>
         {route.length > 0 && (
-          <span className="text-xs font-medium text-gray-600">Транспорт: {currency}{total}</span>
+          <span className="text-xs font-medium text-gray-600">{t('route.total', { amount: `${currency}${total}` })}</span>
         )}
       </div>
     </div>

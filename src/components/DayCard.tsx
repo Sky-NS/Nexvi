@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { ActivityItem } from './ActivityItem';
 import { RouteCard } from './RouteCard';
+import { useTranslation } from '@/i18n/LanguageContext';
 import { Plus, Trash2, ChevronUp, ChevronDown } from 'lucide-react';
 
 interface Props {
@@ -21,6 +22,7 @@ interface Props {
 
 export function DayCard(props: Props) {
   const { day, dayIndex, totalDays, currency, onUpdateDay, onRemoveDay, onMoveDay, onAddActivity, onUpdateActivity, onRemoveActivity, onMoveActivity, onAddRoute, onUpdateRoute, onRemoveRoute } = props;
+  const { t } = useTranslation();
 
   const dayTotal = (day.route || []).reduce((s, r) => s + (r.cost || 0), 0) + day.activities.reduce((s, a) => s + (a.cost || 0), 0);
 
@@ -29,7 +31,7 @@ export function DayCard(props: Props) {
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
-            <Label className="text-xs text-gray-500">День {day.dayNumber}</Label>
+            <Label className="text-xs text-gray-500">{t('day.numberLabel', { n: day.dayNumber })}</Label>
             <div className="flex items-center gap-2">
               <Input
                 value={day.icon || ''}
@@ -37,11 +39,11 @@ export function DayCard(props: Props) {
                 placeholder="📍"
                 className="w-11 h-9 text-center text-base shrink-0 px-0"
               />
-              <Input value={day.title} onChange={(e) => onUpdateDay((d) => ({ ...d, title: e.target.value }))} className="font-semibold text-lg border-0 px-0 focus-visible:ring-0 flex-1 min-w-0" placeholder="Заголовок дня" />
+              <Input value={day.title} onChange={(e) => onUpdateDay((d) => ({ ...d, title: e.target.value }))} className="font-semibold text-lg border-0 px-0 focus-visible:ring-0 flex-1 min-w-0" placeholder={t('day.title')} />
             </div>
           </div>
           <div>
-            <Label className="text-xs text-gray-500">Дата</Label>
+            <Label className="text-xs text-gray-500">{t('day.date')}</Label>
             <Input type="date" value={day.date} onChange={(e) => onUpdateDay((d) => ({ ...d, date: e.target.value }))} className="border-0 px-0 focus-visible:ring-0" />
           </div>
         </div>
@@ -59,12 +61,12 @@ export function DayCard(props: Props) {
           <ActivityItem key={a.id} activity={a} actIndex={i} totalActivities={day.activities.length} currency={currency}
             onUpdate={(u) => onUpdateActivity(i, u)} onRemove={() => onRemoveActivity(i)} onMove={(d) => onMoveActivity(i, d)} />
         ))}
-        <Button variant="ghost" className="w-full text-gray-500" onClick={onAddActivity}><Plus className="w-4 h-4 mr-2" /> Добавить активность</Button>
+        <Button variant="ghost" className="w-full text-gray-500" onClick={onAddActivity}><Plus className="w-4 h-4 mr-2" /> {t('day.addActivity')}</Button>
       </div>
 
       {dayTotal > 0 && (
         <div className="mt-4 pt-3 border-t flex items-center justify-between text-sm">
-          <span className="text-gray-500">Итого за день</span>
+          <span className="text-gray-500">{t('day.total')}</span>
           <span className="font-semibold">{currency}{dayTotal}</span>
         </div>
       )}

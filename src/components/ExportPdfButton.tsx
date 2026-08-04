@@ -22,7 +22,7 @@ export function ExportPdfButton({ trip }: Props) {
       doc.setFontSize(11);
       day.activities.forEach((act) => {
         if (y > 280) { doc.addPage(); y = 20; }
-        doc.text(`${act.time} — ${act.title}${act.location ? ` (${act.location})` : ''}`, 25, y); y += 6;
+        doc.text(`${act.time ? act.time + ' — ' : ''}${act.title}${act.location ? ` (${act.location})` : ''}`, 25, y); y += 6;
         if (act.description) { doc.setFontSize(9); doc.text(act.description, 30, y); y += 5; doc.setFontSize(11); }
       });
       y += 8;

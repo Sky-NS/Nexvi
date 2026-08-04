@@ -1,26 +1,38 @@
 import { DayPlan } from '@/types/trip';
 import { format, parseISO } from 'date-fns';
-import { ru } from 'date-fns/locale';
+import { ru, enUS } from 'date-fns/locale';
+import { useTranslation } from '@/i18n/LanguageContext';
 
 interface Props { days: DayPlan[]; }
 
 export function DayNavGrid({ days }: Props) {
+  const { t, language } = useTranslation();
+  const locale = language === 'ru' ? ru : enUS;
+
   if (days.length < 2) return null;
+
+  // Plain DOM scroll instead of an <a href="#day-N"> anchor: this app uses
+  // HashRouter, so a real hash link would rewrite the route (everything
+  // after '#' is the current route) instead of just scrolling the page.
+  const jumpTo = (dayNumber: number) => {
+    document.getElementById(`day-${dayNumber}`)?.scrollIntoView({ block: 'start' });
+  };
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mb-6">
       {days.map((day) => (
-        <a
+        <button
           key={day.dayNumber}
-          href={`#day-${day.dayNumber}`}
-          className="bg-white border rounded-lg p-3 hover:border-gray-400 hover:shadow-sm transition-all"
+          type="button"
+          onClick={() => jumpTo(day.dayNumber)}
+          className="text-left bg-white border rounded-lg p-3 hover:border-gray-400 hover:shadow-sm transition-all"
         >
           <div className="flex items-center gap-1.5">
             <span className="text-lg leading-none shrink-0" aria-hidden>{day.icon || '📍'}</span>
-            <span className="text-xs text-gray-400">{format(parseISO(day.date), 'd MMM', { locale: ru })}</span>
+            <span className="text-xs text-gray-400">{format(parseISO(day.date), 'd MMM', { locale })}</span>
           </div>
-          <div className="text-sm font-medium line-clamp-1 mt-0.5">День {day.dayNumber}: {day.title || '—'}</div>
-        </a>
+          <div className="text-sm font-medium line-clamp-1 mt-0.5">{t('day.label', { n: day.dayNumber, title: day.title || '—' })}</div>
+        </button>
       ))}
     </div>
   );

@@ -1,7 +1,8 @@
 import { DayPlan } from '@/types/trip';
 import { ActivityView } from './ActivityView';
+import { useTranslation } from '@/i18n/LanguageContext';
 import { format, parseISO } from 'date-fns';
-import { ru } from 'date-fns/locale';
+import { ru, enUS } from 'date-fns/locale';
 
 interface Props {
   day: DayPlan;
@@ -9,6 +10,8 @@ interface Props {
 }
 
 export function DayView({ day, currency }: Props) {
+  const { t, language } = useTranslation();
+  const locale = language === 'ru' ? ru : enUS;
   const dayTotal = (day.route || []).reduce((s, r) => s + (r.cost || 0), 0) + day.activities.reduce((s, a) => s + (a.cost || 0), 0);
 
   return (
@@ -17,7 +20,7 @@ export function DayView({ day, currency }: Props) {
         <span className="text-3xl leading-none shrink-0" aria-hidden>{day.icon || '📍'}</span>
         <div className="min-w-0">
           <p className="text-xs font-medium text-gray-400 uppercase tracking-wide">
-            День {day.dayNumber} · {format(parseISO(day.date), 'd MMMM', { locale: ru })}
+            {t('day.numberLabel', { n: day.dayNumber })} · {format(parseISO(day.date), 'd MMMM', { locale })}
           </p>
           <h3 className="font-bold text-lg text-gray-900 leading-snug truncate">{day.title || '—'}</h3>
         </div>
@@ -43,7 +46,7 @@ export function DayView({ day, currency }: Props) {
 
       {dayTotal > 0 && (
         <div className="flex items-center justify-between text-sm mt-2.5 px-1">
-          <span className="text-gray-400">Итого за день</span>
+          <span className="text-gray-400">{t('day.total')}</span>
           <span className="font-semibold text-gray-700">{currency}{dayTotal}</span>
         </div>
       )}

@@ -2,7 +2,8 @@ import { Activity } from '@/types/trip';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Checkbox } from '@/components/ui/Checkbox';
-import { ChevronUp, ChevronDown, Trash2, GripVertical, MapPin, CheckCircle2, ImagePlus, X } from 'lucide-react';
+import { useTranslation } from '@/i18n/LanguageContext';
+import { ChevronUp, ChevronDown, Trash2, GripVertical, MapPin, CheckCircle2, Camera, Images, Link as LinkIcon, X } from 'lucide-react';
 import { useRef, useState } from 'react';
 
 interface Props {
@@ -37,9 +38,13 @@ function readAndCompressImage(file: File): Promise<string> {
 }
 
 export function ActivityItem({ activity, actIndex, totalActivities, currency, onUpdate, onRemove, onMove }: Props) {
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const [photoBusy, setPhotoBusy] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [linkMode, setLinkMode] = useState(false);
+  const [linkValue, setLinkValue] = useState('');
+  const cameraInputRef = useRef<HTMLInputElement>(null);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
   const mapsHref = activity.location ? `https://www.google.com/maps/search/${encodeURIComponent(activity.location)}` : undefined;
 
   const handleFile = async (file: File | null) => {
@@ -55,6 +60,13 @@ export function ActivityItem({ activity, actIndex, totalActivities, currency, on
     }
   };
 
+  const confirmLink = () => {
+    const url = linkValue.trim();
+    if (url) onUpdate((a) => ({ ...a, photo: url }));
+    setLinkMode(false);
+    setLinkValue('');
+  };
+
   return (
     <div className={`group border rounded-lg p-3 transition-colors ${activity.booked ? 'border-green-200 bg-green-50/40' : 'hover:border-gray-300'}`}>
       <div className="flex items-center gap-2">
@@ -64,8 +76,7 @@ export function ActivityItem({ activity, actIndex, totalActivities, currency, on
           placeholder="🍜"
           className="w-11 h-9 text-center text-base shrink-0 px-0"
         />
-        <Input type="time" value={activity.time} onChange={(e) => onUpdate((a) => ({ ...a, time: e.target.value }))} className="w-24 text-sm shrink-0" />
-        <Input value={activity.title} onChange={(e) => onUpdate((a) => ({ ...a, title: e.target.value }))} placeholder="Название активности" className="flex-1 min-w-0 text-sm font-medium" />
+        <Input value={activity.title} onChange={(e) => onUpdate((a) => ({ ...a, title: e.target.value }))} placeholder={t('activity.name')} className="flex-1 min-w-0 text-sm font-medium" />
         {activity.booked && <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0" />}
         <div className="hidden sm:flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
           <Button variant="ghost" size="icon" disabled={actIndex === 0} onClick={() => onMove(-1)}><ChevronUp className="w-3 h-3" /></Button>
@@ -91,53 +102,78 @@ export function ActivityItem({ activity, actIndex, totalActivities, currency, on
                 type="button"
                 onClick={() => onUpdate((a) => ({ ...a, photo: undefined }))}
                 className="absolute top-1.5 right-1.5 bg-black/60 text-white rounded-full p-1"
-                aria-label="Удалить фото"
+                aria-label={t('activity.removePhoto')}
               >
                 <X className="w-3.5 h-3.5" />
               </button>
             </div>
+          ) : linkMode ? (
+            <div className="flex gap-1.5">
+              <Input
+                autoFocus
+                value={linkValue}
+                onChange={(e) => setLinkValue(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') confirmLink(); if (e.key === 'Escape') setLinkMode(false); }}
+                placeholder={t('activity.photoLinkPlaceholder')}
+                className="text-sm flex-1"
+              />
+              <Button size="sm" onClick={confirmLink}>{t('common.add')}</Button>
+              <Button size="sm" variant="ghost" onClick={() => { setLinkMode(false); setLinkValue(''); }}>{t('common.cancel')}</Button>
+            </div>
           ) : (
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={photoBusy}
-              className="w-full h-20 rounded-lg border-2 border-dashed border-gray-200 text-gray-400 flex items-center justify-center gap-2 text-sm hover:border-gray-300"
-            >
-              <ImagePlus className="w-4 h-4" /> {photoBusy ? 'Загрузка…' : 'Добавить фото'}
-            </button>
+            <div className="grid grid-cols-3 gap-1.5">
+              <button
+                type="button"
+                onClick={() => cameraInputRef.current?.click()}
+                disabled={photoBusy}
+                className="h-16 rounded-lg border-2 border-dashed border-gray-200 text-gray-400 flex flex-col items-center justify-center gap-1 text-xs hover:border-gray-300"
+              >
+                <Camera className="w-4 h-4" /> {t('activity.photoCamera')}
+              </button>
+              <button
+                type="button"
+                onClick={() => galleryInputRef.current?.click()}
+                disabled={photoBusy}
+                className="h-16 rounded-lg border-2 border-dashed border-gray-200 text-gray-400 flex flex-col items-center justify-center gap-1 text-xs hover:border-gray-300"
+              >
+                <Images className="w-4 h-4" /> {t('activity.photoGallery')}
+              </button>
+              <button
+                type="button"
+                onClick={() => setLinkMode(true)}
+                className="h-16 rounded-lg border-2 border-dashed border-gray-200 text-gray-400 flex flex-col items-center justify-center gap-1 text-xs hover:border-gray-300"
+              >
+                <LinkIcon className="w-4 h-4" /> {t('activity.photoLink')}
+              </button>
+            </div>
           )}
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            capture="environment"
-            className="hidden"
-            onChange={(e) => handleFile(e.target.files?.[0] || null)}
-          />
+          {photoBusy && <p className="text-xs text-gray-400">{t('common.loading')}</p>}
+          <input ref={cameraInputRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => handleFile(e.target.files?.[0] || null)} />
+          <input ref={galleryInputRef} type="file" accept="image/*" className="hidden" onChange={(e) => handleFile(e.target.files?.[0] || null)} />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <Input value={activity.location} onChange={(e) => onUpdate((a) => ({ ...a, location: e.target.value }))} placeholder="Локация" className="text-sm" />
-            <Input value={activity.description} onChange={(e) => onUpdate((a) => ({ ...a, description: e.target.value }))} placeholder="Описание" className="text-sm" />
-            <Input value={activity.notes} onChange={(e) => onUpdate((a) => ({ ...a, notes: e.target.value }))} placeholder="Заметки" className="text-sm md:col-span-2" />
+            <Input value={activity.location} onChange={(e) => onUpdate((a) => ({ ...a, location: e.target.value }))} placeholder={t('activity.location')} className="text-sm" />
+            <Input value={activity.description} onChange={(e) => onUpdate((a) => ({ ...a, description: e.target.value }))} placeholder={t('activity.description')} className="text-sm" />
+            <Input value={activity.notes} onChange={(e) => onUpdate((a) => ({ ...a, notes: e.target.value }))} placeholder={t('activity.notes')} className="text-sm md:col-span-2" />
           </div>
           <div className="grid grid-cols-2 gap-3 items-center">
             <div className="flex items-center gap-1.5">
               <span className="text-xs text-gray-400 shrink-0">{currency || '#'}</span>
               <Input type="number" value={activity.cost ?? ''} onChange={(e) => onUpdate((a) => ({ ...a, cost: e.target.value === '' ? undefined : Number(e.target.value) }))} placeholder="0" className="text-sm" />
             </div>
-            <Input value={activity.hours || ''} onChange={(e) => onUpdate((a) => ({ ...a, hours: e.target.value }))} placeholder="Часы работы" className="text-sm" />
+            <Input value={activity.hours || ''} onChange={(e) => onUpdate((a) => ({ ...a, hours: e.target.value }))} placeholder={t('activity.hours')} className="text-sm" />
             <label className="flex items-center gap-2 text-sm text-gray-600">
               <Checkbox checked={!!activity.booked} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate((a) => ({ ...a, booked: e.target.checked }))} />
-              Забронировано
+              {t('activity.booked')}
             </label>
             {mapsHref && (
               <a href={mapsHref} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700">
-                <MapPin className="w-3.5 h-3.5" /> Открыть карту
+                <MapPin className="w-3.5 h-3.5" /> {t('activity.openMap')}
               </a>
             )}
           </div>
           {activity.booked && (
-            <Input value={activity.bookingNote || ''} onChange={(e) => onUpdate((a) => ({ ...a, bookingNote: e.target.value }))} placeholder="Номер брони, место, вагон..." className="text-sm" />
+            <Input value={activity.bookingNote || ''} onChange={(e) => onUpdate((a) => ({ ...a, bookingNote: e.target.value }))} placeholder={t('activity.bookingNotePlaceholder')} className="text-sm" />
           )}
         </div>
       )}
