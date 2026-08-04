@@ -59,11 +59,13 @@ export async function fetchWikipediaThumbnail(query: string, language: string): 
 }
 
 // Mutates and returns the same trip: for every activity without a photo
-// already, tries to find a matching Wikipedia article (by location, falling
-// back to the activity title) and attaches its thumbnail. Two activities
-// never end up sharing the same photo — the first lookup to resolve with a
-// given image "claims" it, so anything that would otherwise repeat that
-// same image is left empty instead of visually duplicated.
+// already, tries to find a matching Wikipedia article — searching by the
+// activity's title first (location fields tend to name a district/area
+// rather than the activity itself, which was matching the wrong photos),
+// falling back to location only if the title search comes up empty. Two
+// activities never end up sharing the same photo — the first lookup to
+// resolve with a given image "claims" it, so anything that would otherwise
+// repeat that same image is left empty instead of visually duplicated.
 export async function attachWikipediaPhotos(trip: Trip, language: string): Promise<Trip> {
   const usedPhotos = new Set<string>();
   const lookups: Promise<void>[] = [];
@@ -71,15 +73,22 @@ export async function attachWikipediaPhotos(trip: Trip, language: string): Promi
   for (const day of trip.days) {
     for (const activity of day.activities) {
       if (activity.photo) continue;
-      const query = (activity.location || activity.title || '').trim();
-      if (!query) continue;
+      const candidates = [activity.title, activity.location]
+        .map((s) => (s || '').trim())
+        .filter(Boolean);
+      if (candidates.length === 0) continue;
+
       lookups.push(
-        fetchWikipediaThumbnail(query, language).then((url) => {
-          if (url && !usedPhotos.has(url)) {
-            usedPhotos.add(url);
-            activity.photo = url;
+        (async () => {
+          for (const query of candidates) {
+            const url = await fetchWikipediaThumbnail(query, language);
+            if (url && !usedPhotos.has(url)) {
+              usedPhotos.add(url);
+              activity.photo = url;
+              return;
+            }
           }
-        })
+        })()
       );
     }
   }
