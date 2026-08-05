@@ -114,6 +114,21 @@ const ru: TranslationDict = {
   'settings.language.ru': 'Русский',
   'settings.language.en': 'English',
 
+  'settings.theme': 'Тема оформления',
+  'settings.theme.system': 'Как в системе',
+  'settings.theme.light': 'Светлая',
+  'settings.theme.dark': 'Тёмная',
+
+  'generating.title': 'Собираем ваш план',
+  'generating.phrase1': 'Анализируем точку путешествия…',
+  'generating.phrase2': 'Выбираем места…',
+  'generating.phrase3': 'Прокладываем самый лучший маршрут…',
+  'generating.phrase4': 'Считаем примерный бюджет…',
+  'generating.phrase5': 'Подбираем активности под ваш темп…',
+  'generating.phrase6': 'Сверяемся с картой…',
+  'generating.phrase7': 'Ищем скрытые жемчужины…',
+  'generating.phrase8': 'Делаем немного магии…',
+
   'trip.notFound': 'Поездка не найдена',
   'trip.goHome': 'На главную',
   'trip.addDay': 'Добавить день',
@@ -269,6 +284,21 @@ const en: TranslationDict = {
   'settings.language.system': 'System default',
   'settings.language.ru': 'Русский',
   'settings.language.en': 'English',
+
+  'settings.theme': 'Appearance',
+  'settings.theme.system': 'System default',
+  'settings.theme.light': 'Light',
+  'settings.theme.dark': 'Dark',
+
+  'generating.title': 'Putting your plan together',
+  'generating.phrase1': 'Analyzing your destination…',
+  'generating.phrase2': 'Picking out places…',
+  'generating.phrase3': 'Charting the best route…',
+  'generating.phrase4': 'Estimating the budget…',
+  'generating.phrase5': 'Matching activities to your pace…',
+  'generating.phrase6': 'Double-checking the map…',
+  'generating.phrase7': 'Digging up hidden gems…',
+  'generating.phrase8': 'Sprinkling in some magic…',
 
   'trip.notFound': 'Trip not found',
   'trip.goHome': 'Go home',
