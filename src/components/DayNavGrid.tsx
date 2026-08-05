@@ -32,7 +32,7 @@ export function DayNavGrid({ days }: Props) {
             <span className="text-2xl leading-none shrink-0" aria-hidden>{day.icon || '📍'}</span>
             <span className="text-xs font-mono text-ink-faint">{format(parseISO(day.date), 'd MMM', { locale })}</span>
           </div>
-          <div className="text-sm font-semibold text-ink mt-2 text-left">{day.title || '—'}</div>
+          <div className="text-sm font-semibold text-ink mt-2 text-left line-clamp-3">{day.title || '—'}</div>
         </button>
       ))}
     </div>
