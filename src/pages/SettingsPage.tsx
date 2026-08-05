@@ -75,8 +75,8 @@ export default function SettingsPage() {
               <Input type={show ? 'text' : 'password'} placeholder={provider === 'deepseek' ? 'sk-... (DeepSeek)' : provider === 'gemini' ? 'Gemini key' : 'sk-... (OpenAI)'} value={apiKey} onChange={(e) => setApiKey(e.target.value)} />
               <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-faint hover:text-ink-soft">{show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}</button>
             </div>
-            {apiKey && <Button variant="destructive" size="icon" onClick={resetApiKey} className="shrink-0"><Trash2 className="w-4 h-4" /></Button>}
             <Button variant="outline" size="icon" onClick={pasteApiKey} className="shrink-0" aria-label={t('settings.apiKeyPaste')}><ClipboardPaste className="w-4 h-4" /></Button>
+            {apiKey && <Button variant="destructive" size="icon" onClick={resetApiKey} className="shrink-0"><Trash2 className="w-4 h-4" /></Button>}
           </div>
           <p className="text-xs text-ink-soft mt-2">{t('settings.apiKeyHelp')}</p>
         </div>
