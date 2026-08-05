@@ -10,7 +10,7 @@ const ru: TranslationDict = {
   'common.next': 'Далее',
   'common.save': 'Сохранить',
   'common.done': 'Готово',
-  'common.edit': 'Править',
+  'common.edit': 'Редактировать',
   'common.delete': 'Удалить',
   'common.cancel': 'Отмена',
   'common.add': 'Добавить',
