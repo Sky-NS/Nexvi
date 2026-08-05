@@ -6,6 +6,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <script>
+      (function () {
+        try {
+          var raw = localStorage.getItem('nexvi-settings');
+          var theme = raw ? (JSON.parse(raw).state || {}).theme : 'system';
+          var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var isDark = theme === 'dark' || (theme !== 'light' && systemDark);
+          if (isDark) document.documentElement.classList.add('dark');
+        } catch (e) {}
+      })();
+    </script>
     <title>Nexvi — Конструктор плана путешествия</title>
   </head>
   <body>
