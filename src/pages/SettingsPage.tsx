@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/Label';
 import { CurrencyPicker } from '@/components/CurrencyPicker';
 import { useTranslation } from '@/i18n/LanguageContext';
 import { SUPPORTED_LANGUAGES } from '@/i18n/translations';
-import { ArrowLeft, Trash2, Eye, EyeOff } from 'lucide-react';
+import { ArrowLeft, Trash2, Eye, EyeOff, Monitor, Sun, Moon } from 'lucide-react';
 import { useState } from 'react';
 
 export default function SettingsPage() {
@@ -16,6 +16,7 @@ export default function SettingsPage() {
     apiKey, provider, setApiKey, setProvider, resetApiKey,
     preferredCurrency, setPreferredCurrency,
     language, setLanguage,
+    theme, setTheme,
   } = useSettingsStore();
   const [show, setShow] = useState(false);
 
@@ -53,6 +54,21 @@ export default function SettingsPage() {
             <CurrencyPicker value={preferredCurrency} onChange={setPreferredCurrency} />
           </div>
           <p className="text-xs text-ink-soft mt-2">{t('settings.currencyHelp')}</p>
+        </div>
+
+        <div>
+          <Label>{t('settings.theme')}</Label>
+          <div className="flex gap-2 mt-2 flex-wrap">
+            <Button variant={theme === 'system' ? 'default' : 'outline'} onClick={() => setTheme('system')}>
+              <Monitor className="w-4 h-4 mr-2" />{t('settings.theme.system')}
+            </Button>
+            <Button variant={theme === 'light' ? 'default' : 'outline'} onClick={() => setTheme('light')}>
+              <Sun className="w-4 h-4 mr-2" />{t('settings.theme.light')}
+            </Button>
+            <Button variant={theme === 'dark' ? 'default' : 'outline'} onClick={() => setTheme('dark')}>
+              <Moon className="w-4 h-4 mr-2" />{t('settings.theme.dark')}
+            </Button>
+          </div>
         </div>
 
         <div>

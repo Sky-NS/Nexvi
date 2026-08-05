@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Checkbox } from '@/components/ui/Checkbox';
 import { DateRangePicker } from '@/components/DateRangePicker';
+import { GeneratingOverlay } from '@/components/GeneratingOverlay';
 import { useTranslation } from '@/i18n/LanguageContext';
 import { LANGUAGE_NAMES } from '@/i18n/translations';
 import { getCurrencySymbol } from '@/lib/currencies';
@@ -275,6 +276,8 @@ export default function TripWizard() {
 
         {error && <div className="mt-4 p-3 bg-danger-soft text-danger rounded-lg flex items-center gap-2 text-sm"><AlertCircle className="w-4 h-4 shrink-0" /> {error}</div>}
       </div>
+
+      {loading && <GeneratingOverlay />}
     </div>
   );
 }
