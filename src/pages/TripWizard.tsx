@@ -125,15 +125,21 @@ export default function TripWizard() {
   const showTravelersInput = params.preferences.travelGroup === 'family' || params.preferences.travelGroup === 'group';
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
-      <div className="mb-6 flex items-center gap-2">
+    <div className="nx-fade-in max-w-2xl mx-auto px-4 py-8">
+      <div className="mb-5 flex items-center gap-2">
         <Button variant="ghost" size="sm" onClick={() => navigate('/')}><ArrowLeft className="w-4 h-4" /></Button>
-        <h1 className="text-2xl font-bold">{t('wizard.title')}</h1>
+        <h1 className="text-2xl font-extrabold tracking-tight text-ink">{t('wizard.title')}</h1>
       </div>
-      <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6">
+      <div className="flex items-center gap-2.5 mb-4 px-1">
+        <span className="font-mono text-xs font-semibold text-ink-faint shrink-0">{step}/2</span>
+        <div className="flex-1 h-1 rounded-full bg-border-soft overflow-hidden">
+          <div className="h-full rounded-full bg-brand transition-all duration-300" style={{ width: step === 1 ? '50%' : '100%' }} />
+        </div>
+      </div>
+      <div className="bg-surface rounded-2xl shadow-card border border-border p-4 sm:p-6">
         {step === 1 && (
           <div className="space-y-5">
-            <h2 className="text-lg font-semibold mb-2">{t('wizard.step1.heading')}</h2>
+            <h2 className="text-lg font-bold text-ink mb-2">{t('wizard.step1.heading')}</h2>
 
             <div><Label>{t('wizard.destination')}</Label>
               <Input placeholder={t('wizard.destinationPlaceholder')} value={params.destination} onChange={(e) => setParams({ ...params, destination: e.target.value })} />
@@ -160,13 +166,13 @@ export default function TripWizard() {
               </div>
               {showTravelersInput && (
                 <div className="mt-2">
-                  <Label className="text-xs text-gray-500">{t('wizard.exactTravelers')}</Label>
+                  <Label>{t('wizard.exactTravelers')}</Label>
                   <Input type="number" min={1} value={params.travelers}
                     onChange={(e) => setParams({ ...params, travelers: parseInt(e.target.value) || 1 })} />
                 </div>
               )}
               {!showTravelersInput && (
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-ink-soft mt-1">
                   {params.preferences.travelGroup === 'solo' ? t('wizard.travelers1') : t('wizard.travelers2')}
                 </p>
               )}
@@ -191,7 +197,7 @@ export default function TripWizard() {
             <div>
               <Label className="mb-2 block">{t('wizard.wishes')}</Label>
               <textarea
-                className="w-full min-h-[80px] rounded-md border border-gray-200 bg-white px-3 py-2 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-gray-900/10"
+                className="w-full min-h-[80px] rounded-xl border border-border bg-surface px-3 py-2 text-sm text-ink resize-y focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand"
                 placeholder={t('wizard.wishesPlaceholder')}
                 value={params.preferences.wishes || ''}
                 onChange={(e) => up('wishes', e.target.value)}
@@ -200,7 +206,7 @@ export default function TripWizard() {
 
             <div>
               <Label>{t('wizard.budget')}</Label>
-              <select className="w-full h-10 rounded-md border border-gray-200 bg-white px-3 py-2 text-sm"
+              <select className="w-full h-10 rounded-xl border border-border bg-surface px-3 py-2 text-sm text-ink"
                 value={params.budget || ''} onChange={(e) => setParams({ ...params, budget: e.target.value || undefined })}>
                 <option value="">{t('common.notSpecified')}</option>
                 <option value="economy">{t('wizard.budget.economy')}</option>
@@ -217,12 +223,12 @@ export default function TripWizard() {
 
         {step === 2 && (
           <div className="space-y-5">
-            <h2 className="text-lg font-semibold mb-2">{t('wizard.step2.heading')}</h2>
+            <h2 className="text-lg font-bold text-ink mb-2">{t('wizard.step2.heading')}</h2>
 
             <div><Label className="mb-2 block">{t('wizard.vacationType')}</Label>
               <div className="grid grid-cols-2 gap-2">
                 {TYPES.map((opt) => (
-                  <label key={opt.key} className="flex items-center gap-2 p-2 rounded-lg border hover:bg-gray-50 cursor-pointer">
+                  <label key={opt.key} className="flex items-center gap-2 p-2 rounded-lg border hover:bg-bg cursor-pointer">
                     <Checkbox checked={params.preferences[opt.key]} onChange={(e: React.ChangeEvent<HTMLInputElement>) => up(opt.key, e.target.checked)} />
                     <span className="text-sm">{opt.label}</span>
                   </label>
@@ -267,7 +273,7 @@ export default function TripWizard() {
           </div>
         )}
 
-        {error && <div className="mt-4 p-3 bg-red-50 text-red-700 rounded-lg flex items-center gap-2 text-sm"><AlertCircle className="w-4 h-4 shrink-0" /> {error}</div>}
+        {error && <div className="mt-4 p-3 bg-danger-soft text-danger rounded-lg flex items-center gap-2 text-sm"><AlertCircle className="w-4 h-4 shrink-0" /> {error}</div>}
       </div>
     </div>
   );

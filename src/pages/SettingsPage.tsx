@@ -20,12 +20,12 @@ export default function SettingsPage() {
   const [show, setShow] = useState(false);
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
+    <div className="nx-fade-in max-w-2xl mx-auto px-4 py-8">
       <div className="mb-6 flex items-center gap-2">
         <Button variant="ghost" size="sm" onClick={() => navigate('/')}><ArrowLeft className="w-4 h-4" /></Button>
-        <h1 className="text-2xl font-bold">{t('settings.title')}</h1>
+        <h1 className="text-2xl font-extrabold tracking-tight text-ink">{t('settings.title')}</h1>
       </div>
-      <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 space-y-6">
+      <div className="bg-surface rounded-2xl shadow-card border border-border p-4 sm:p-6 space-y-6">
         <div>
           <Label>{t('settings.provider')}</Label>
           <div className="flex gap-2 mt-2 flex-wrap">
@@ -40,11 +40,11 @@ export default function SettingsPage() {
           <div className="flex gap-2 mt-2">
             <div className="relative flex-1">
               <Input type={show ? 'text' : 'password'} placeholder={provider === 'deepseek' ? 'sk-... (DeepSeek)' : provider === 'gemini' ? 'Gemini key' : 'sk-... (OpenAI)'} value={apiKey} onChange={(e) => setApiKey(e.target.value)} />
-              <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">{show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}</button>
+              <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-faint hover:text-ink-soft">{show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}</button>
             </div>
             {apiKey && <Button variant="destructive" size="icon" onClick={resetApiKey} className="shrink-0"><Trash2 className="w-4 h-4" /></Button>}
           </div>
-          <p className="text-xs text-gray-500 mt-2">{t('settings.apiKeyHelp')}</p>
+          <p className="text-xs text-ink-soft mt-2">{t('settings.apiKeyHelp')}</p>
         </div>
 
         <div>
@@ -52,7 +52,7 @@ export default function SettingsPage() {
           <div className="mt-2">
             <CurrencyPicker value={preferredCurrency} onChange={setPreferredCurrency} />
           </div>
-          <p className="text-xs text-gray-500 mt-2">{t('settings.currencyHelp')}</p>
+          <p className="text-xs text-ink-soft mt-2">{t('settings.currencyHelp')}</p>
         </div>
 
         <div>

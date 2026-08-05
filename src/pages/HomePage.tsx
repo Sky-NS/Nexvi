@@ -28,21 +28,24 @@ export default function HomePage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="nx-fade-in max-w-4xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-2">
-          <div className="w-9 h-9 rounded-xl bg-gray-900 flex items-center justify-center">
+        <div className="flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-2xl bg-brand shadow-card flex items-center justify-center">
             <Plane className="w-4 h-4 text-white" />
           </div>
-          <h1 className="text-xl font-bold">{t('app.name')}</h1>
+          <h1 className="text-xl font-extrabold tracking-tight text-ink">{t('app.name')}</h1>
         </div>
         <Button variant="ghost" size="icon" onClick={() => navigate('/settings')}><Settings className="w-4 h-4" /></Button>
       </div>
 
       {trips.length === 0 ? (
-        <div className="text-center py-16 px-6 bg-white rounded-xl border border-dashed">
-          <h2 className="text-xl font-semibold mb-2">{t('home.emptyTitle')}</h2>
-          <p className="text-sm text-gray-500 mb-6">{t('home.emptySubtitle')}</p>
+        <div className="text-center py-16 px-6 bg-surface rounded-2xl border border-dashed border-border">
+          <div className="w-12 h-12 rounded-2xl bg-brand-soft flex items-center justify-center mx-auto mb-4">
+            <Plane className="w-5 h-5 text-brand" />
+          </div>
+          <h2 className="text-xl font-bold text-ink mb-2">{t('home.emptyTitle')}</h2>
+          <p className="text-sm text-ink-soft mb-6">{t('home.emptySubtitle')}</p>
           <Button onClick={handleCreate}><Plus className="w-4 h-4 mr-2" /> {t('home.createTrip')}</Button>
         </div>
       ) : (

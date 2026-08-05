@@ -62,13 +62,13 @@ export default function TripEditPage() {
   const finishEditing = () => { updateTrip(localTrip); setIsEditing(false); };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-6 md:py-8">
-      <div className="flex items-center justify-between gap-3 mb-5">
+    <div className="nx-fade-in max-w-4xl mx-auto px-4 py-6 md:py-8">
+      <div className="flex items-center justify-between gap-3 mb-6">
         <div className="flex items-center gap-2 min-w-0">
           <Button variant="ghost" size="sm" onClick={() => navigate('/')}><ArrowLeft className="w-4 h-4" /></Button>
           <div className="min-w-0">
-            <h1 className="text-xl md:text-2xl font-bold truncate">{localTrip.destination}</h1>
-            <p className="text-xs md:text-sm text-gray-500">
+            <h1 className="text-xl md:text-2xl font-extrabold tracking-tight text-ink truncate">{localTrip.destination}</h1>
+            <p className="text-xs md:text-sm font-mono text-ink-soft mt-0.5">
               {format(parseISO(localTrip.startDate), 'd MMM', { locale })} — {format(parseISO(localTrip.endDate), 'd MMM yyyy', { locale })} · {localTrip.travelers} {t('common.people')}
             </p>
           </div>
