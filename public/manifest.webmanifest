@@ -1,0 +1,18 @@
+{
+  "name": "Nexvi — Конструктор плана путешествия",
+  "short_name": "Nexvi",
+  "description": "ИИ помогает составить и отредактировать план поездки по дням.",
+  "start_url": ".",
+  "scope": ".",
+  "id": ".",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#100F1E",
+  "theme_color": "#3E35C6",
+  "lang": "ru",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
