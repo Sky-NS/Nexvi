@@ -285,6 +285,22 @@ ${params.preferences.wishes?.trim() ? `🌟 Обязательные пожел�
     if (e?.name === 'AbortError') {
       throw new Error('Генерация заняла слишком много времени. Попробуйте ещё раз — если повторится, попробуйте сократить число дней или сменить провайдера в настройках.');
     }
+    if (e instanceof TypeError) {
+      // The fetch itself never got a response — this is what a CORS
+      // rejection, a wrong/unreachable URL, or a real connectivity problem
+      // all look like from here (browsers deliberately don't say which).
+      if (TEST_MODE) {
+        // eslint-disable-next-line no-console
+        console.error(
+          'Nexvi: proxy fetch failed. Most likely cause: the Worker\'s ALLOWED_ORIGIN doesn\'t exactly match this site\'s origin, or VITE_AI_PROXY_URL is wrong/unreachable.',
+          '\nThis site\'s origin:', typeof window !== 'undefined' ? window.location.origin : '(unknown)',
+          '\nVITE_AI_PROXY_URL:', AI_PROXY_URL || '(not set)',
+          '\nOriginal error:', e
+        );
+        throw new Error('Не удалось связаться с сервером генерации. Похоже, прокси-сервер недоступен или неверно настроен — проверьте ALLOWED_ORIGIN в воркере (должен точно совпадать с адресом сайта) и VITE_AI_PROXY_URL в переменных репозитория.');
+      }
+      throw new Error('Не удалось связаться с сервером ИИ. Проверьте подключение к интернету и попробуйте снова.');
+    }
     throw e;
   } finally {
     clearTimeout(timeoutId);
