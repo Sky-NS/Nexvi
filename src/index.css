@@ -91,7 +91,7 @@
     border-radius: 4px;
   }
   .nx-fade-in {
-    animation: nxFadeIn 0.35s ease both;
+    animation: nxFadeIn 0.35s ease;
   }
   @keyframes nxFadeIn {
     from { opacity: 0; transform: translateY(6px); }
