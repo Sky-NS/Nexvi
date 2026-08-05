@@ -21,7 +21,7 @@
 export default {
   async fetch(request, env) {
     const origin = request.headers.get('Origin') || '';
-    const allowedOrigin = env.ALLOWED_ORIGIN || '';
+    const allowedOrigin = (env.ALLOWED_ORIGIN || '').replace(/\/+$/, '');
     const originOk = !!allowedOrigin && origin === allowedOrigin;
 
     const corsHeaders = {
