@@ -6,7 +6,8 @@ import { Label } from '@/components/ui/Label';
 import { CurrencyPicker } from '@/components/CurrencyPicker';
 import { useTranslation } from '@/i18n/LanguageContext';
 import { SUPPORTED_LANGUAGES } from '@/i18n/translations';
-import { ArrowLeft, Trash2, Eye, EyeOff, Monitor, Sun, Moon } from 'lucide-react';
+import { useInstallPrompt } from '@/hooks/useInstallPrompt';
+import { ArrowLeft, Trash2, Eye, EyeOff, Monitor, Sun, Moon, Download } from 'lucide-react';
 import { useState } from 'react';
 
 export default function SettingsPage() {
@@ -19,6 +20,7 @@ export default function SettingsPage() {
     theme, setTheme,
   } = useSettingsStore();
   const [show, setShow] = useState(false);
+  const { canInstall, isInstalled, isIos, promptInstall } = useInstallPrompt();
 
   return (
     <div className="nx-fade-in max-w-2xl mx-auto px-4 py-8">
@@ -82,6 +84,21 @@ export default function SettingsPage() {
                 {t(l.labelKey)}
               </Button>
             ))}
+          </div>
+        </div>
+
+        <div>
+          <Label>{t('settings.app')}</Label>
+          <div className="mt-2">
+            {isInstalled ? (
+              <p className="text-sm text-ink-soft">{t('settings.app.installed')}</p>
+            ) : canInstall ? (
+              <Button onClick={() => promptInstall()}><Download className="w-4 h-4 mr-2" />{t('install.installButton')}</Button>
+            ) : isIos ? (
+              <p className="text-sm text-ink-soft">{t('install.iosBody')}</p>
+            ) : (
+              <p className="text-sm text-ink-soft">{t('settings.app.unavailable')}</p>
+            )}
           </div>
         </div>
       </div>
