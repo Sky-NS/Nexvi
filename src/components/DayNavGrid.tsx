@@ -19,7 +19,7 @@ export function DayNavGrid({ days }: Props) {
   };
 
   return (
-    <div className="flex flex-wrap justify-center gap-2 mb-6">
+    <div id="day-nav-grid" className="flex flex-wrap justify-center gap-2 mb-6">
       {days.map((day) => (
         <button
           key={day.dayNumber}
