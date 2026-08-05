@@ -7,7 +7,7 @@ import { CurrencyPicker } from '@/components/CurrencyPicker';
 import { useTranslation } from '@/i18n/LanguageContext';
 import { SUPPORTED_LANGUAGES } from '@/i18n/translations';
 import { useInstallPrompt } from '@/hooks/useInstallPrompt';
-import { ArrowLeft, Trash2, Eye, EyeOff, Monitor, Sun, Moon, Download } from 'lucide-react';
+import { ArrowLeft, Trash2, Eye, EyeOff, Monitor, Sun, Moon, Download, ClipboardPaste } from 'lucide-react';
 import { useState } from 'react';
 
 export default function SettingsPage() {
@@ -21,6 +21,19 @@ export default function SettingsPage() {
   } = useSettingsStore();
   const [show, setShow] = useState(false);
   const { canInstall, isInstalled, isIos, promptInstall } = useInstallPrompt();
+
+  const pasteApiKey = async () => {
+    try {
+      const text = await navigator.clipboard.readText();
+      if (text.trim()) {
+        setApiKey(text.trim());
+        setShow(true);
+      }
+    } catch {
+      // Clipboard permission denied or unsupported here — the user can
+      // still paste manually through the field's own context menu.
+    }
+  };
 
   return (
     <div className="nx-fade-in max-w-2xl mx-auto px-4 py-8">
@@ -46,6 +59,7 @@ export default function SettingsPage() {
               <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-faint hover:text-ink-soft">{show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}</button>
             </div>
             {apiKey && <Button variant="destructive" size="icon" onClick={resetApiKey} className="shrink-0"><Trash2 className="w-4 h-4" /></Button>}
+            <Button variant="outline" size="icon" onClick={pasteApiKey} className="shrink-0" aria-label={t('settings.apiKeyPaste')}><ClipboardPaste className="w-4 h-4" /></Button>
           </div>
           <p className="text-xs text-ink-soft mt-2">{t('settings.apiKeyHelp')}</p>
         </div>
