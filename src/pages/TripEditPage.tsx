@@ -73,7 +73,7 @@ export default function TripEditPage() {
             </p>
           </div>
         </div>
-        <div className="flex gap-2 pl-1">
+        <div className="flex gap-2 justify-center">
           {!isEditing && <ExportPdfButton trip={localTrip} />}
           {isEditing ? (
             <Button onClick={finishEditing}><Check className="w-4 h-4 mr-2" />{t('common.done')}</Button>
