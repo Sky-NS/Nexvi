@@ -16,7 +16,8 @@ import { GeneratingOverlay } from '@/components/GeneratingOverlay';
 import { useTranslation } from '@/i18n/LanguageContext';
 import { LANGUAGE_NAMES } from '@/i18n/translations';
 import { getCurrencySymbol } from '@/lib/currencies';
-import { ArrowLeft, ArrowRight, Loader2, AlertCircle, User, Heart, Users, PartyPopper, Footprints, Bus, Car, KeyRound } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Loader2, AlertCircle, User, Heart, Users, PartyPopper, Footprints, Bus, Car, KeyRound, Plus } from 'lucide-react';
+import { CustomInterestDialog } from '@/components/CustomInterestDialog';
 import { TEST_MODE } from '@/config';
 
 export default function TripWizard() {
@@ -27,6 +28,7 @@ export default function TripWizard() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showCustomInterest, setShowCustomInterest] = useState(false);
 
   const PACE = [
     { value: 'relaxed' as const, label: t('wizard.pace.relaxed'), desc: t('wizard.pace.relaxedDesc') },
@@ -262,8 +264,26 @@ export default function TripWizard() {
                       up('interests', arr);
                     }}>{i}</Button>
                 ))}
+                {params.preferences.interests.filter((i) => !INTERESTS.includes(i)).map((i) => (
+                  <Button key={i} variant="default" size="sm"
+                    onClick={() => up('interests', params.preferences.interests.filter((x) => x !== i))}>{i}</Button>
+                ))}
+                <Button variant="outline" size="sm" onClick={() => setShowCustomInterest(true)}>
+                  <Plus className="w-3.5 h-3.5 mr-1" />{t('wizard.customInterest.add')}
+                </Button>
               </div>
             </div>
+
+            {showCustomInterest && (
+              <CustomInterestDialog
+                onClose={() => setShowCustomInterest(false)}
+                onAdd={(values) => {
+                  const merged = [...params.preferences.interests];
+                  for (const v of values) if (!merged.includes(v)) merged.push(v);
+                  up('interests', merged);
+                }}
+              />
+            )}
 
             <div className="flex flex-col sm:flex-row gap-3 mt-4">
               <Button variant="outline" className="w-full sm:flex-1" onClick={() => setStep(1)}><ArrowLeft className="w-4 h-4 mr-2" /> {t('common.back')}</Button>
