@@ -5,7 +5,7 @@ export const Label = forwardRef<HTMLLabelElement, LabelHTMLAttributes<HTMLLabelE
   ({ className, ...props }, ref) => (
     <label
       ref={ref}
-      className={cn('text-sm font-medium leading-none peer-disabled:opacity-70', className)}
+      className={cn('text-xs font-semibold uppercase tracking-wider text-ink-faint leading-none peer-disabled:opacity-70', className)}
       {...props}
     />
   )

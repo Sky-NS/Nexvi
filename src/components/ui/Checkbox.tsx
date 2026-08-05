@@ -6,7 +6,7 @@ export const Checkbox = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInp
     <input
       ref={ref}
       type="checkbox"
-      className={cn('h-4 w-4 rounded border-gray-300 text-gray-900 focus:ring-gray-400', className)}
+      className={cn('h-4 w-4 rounded border-ink-faint text-brand focus:ring-2 focus:ring-brand/30 accent-brand', className)}
       {...props}
     />
   )
