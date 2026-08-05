@@ -19,14 +19,14 @@ export function DayNavGrid({ days }: Props) {
   };
 
   return (
-    <div className="grid grid-cols-3 gap-2 mb-6">
+    <div className="flex flex-wrap justify-center gap-2 mb-6">
       {days.map((day) => (
         <button
           key={day.dayNumber}
           type="button"
           onClick={() => jumpTo(day.dayNumber)}
           aria-label={t('day.label', { n: day.dayNumber, title: day.title || '—' })}
-          className="flex flex-col justify-center text-left bg-surface border border-border rounded-xl p-3 min-h-[112px] hover:border-brand hover:shadow-card transition-all"
+          className="flex flex-col justify-center text-left bg-surface border border-border rounded-xl p-3 min-h-[112px] w-[calc((100%_-_16px)/3)] hover:border-brand hover:shadow-card transition-all"
         >
           <div className="flex items-center justify-center gap-1.5">
             <span className="text-2xl leading-none shrink-0" aria-hidden>{day.icon || '📍'}</span>
