@@ -177,6 +177,7 @@ const ru: TranslationDict = {
   'budget.heading': '📊 Сводка расходов',
   'budget.day': 'День',
   'budget.date': 'Дата',
+  'budget.dayTitle': 'Заголовок дня',
   'budget.amount': 'Сумма',
   'budget.total': 'Итого за поездку',
 
@@ -359,6 +360,7 @@ const en: TranslationDict = {
   'budget.heading': '📊 Cost summary',
   'budget.day': 'Day',
   'budget.date': 'Date',
+  'budget.dayTitle': 'Day title',
   'budget.amount': 'Amount',
   'budget.total': 'Trip total',
 
