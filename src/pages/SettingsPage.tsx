@@ -3,11 +3,13 @@ import { useSettingsStore } from '@/store/settingsStore';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
+import { RoundCheckbox } from '@/components/ui/RoundCheckbox';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { CurrencyPicker } from '@/components/CurrencyPicker';
-import { useTranslation } from '@/i18n/LanguageContext';
+import { useTranslation, resolveLanguage } from '@/i18n/LanguageContext';
 import { SUPPORTED_LANGUAGES } from '@/i18n/translations';
 import { useInstallPrompt } from '@/hooks/useInstallPrompt';
-import { ArrowLeft, Trash2, Eye, EyeOff, Monitor, Sun, Moon, Download, ClipboardPaste } from 'lucide-react';
+import { ArrowLeft, Trash2, Eye, EyeOff, Monitor, Download, ClipboardPaste } from 'lucide-react';
 import { useState } from 'react';
 
 export default function SettingsPage() {
@@ -34,6 +36,21 @@ export default function SettingsPage() {
       // still paste manually through the field's own context menu.
     }
   };
+
+  // Turning "use system" off locks in whatever it currently resolves to,
+  // so the visible theme/language doesn't jump at the moment of toggling —
+  // it just stops following the system from then on.
+  const handleThemeSystemToggle = (useSystem: boolean) => {
+    if (useSystem) { setTheme('system'); return; }
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setTheme(systemDark ? 'dark' : 'light');
+  };
+  const handleLanguageSystemToggle = (useSystem: boolean) => {
+    if (useSystem) { setLanguage('system'); return; }
+    setLanguage(resolveLanguage('system'));
+  };
+
+  const languageValue = language === 'system' ? resolveLanguage('system') : language;
 
   return (
     <div className="nx-fade-in max-w-2xl mx-auto px-4 py-8">
@@ -74,31 +91,44 @@ export default function SettingsPage() {
 
         <div>
           <Label>{t('settings.theme')}</Label>
-          <div className="flex flex-wrap justify-center gap-2 mt-2">
-            <Button variant={theme === 'system' ? 'default' : 'outline'} onClick={() => setTheme('system')} className="w-[calc((100%_-_16px)/3)] min-h-[52px] px-2 text-xs">
-              <Monitor className="w-4 h-4 mr-1.5 shrink-0" />{t('settings.theme.system')}
-            </Button>
-            <Button variant={theme === 'light' ? 'default' : 'outline'} onClick={() => setTheme('light')} className="w-[calc((100%_-_16px)/3)] min-h-[52px] px-2 text-xs">
-              <Sun className="w-4 h-4 mr-1.5 shrink-0" />{t('settings.theme.light')}
-            </Button>
-            <Button variant={theme === 'dark' ? 'default' : 'outline'} onClick={() => setTheme('dark')} className="w-[calc((100%_-_16px)/3)] min-h-[52px] px-2 text-xs">
-              <Moon className="w-4 h-4 mr-1.5 shrink-0" />{t('settings.theme.dark')}
-            </Button>
+          <div className="mt-2">
+            <label className="inline-flex items-center gap-2.5 cursor-pointer select-none">
+              <RoundCheckbox checked={theme === 'system'} onChange={handleThemeSystemToggle} />
+              <Monitor className="w-4 h-4 text-ink-soft" />
+              <span className="text-sm font-medium text-ink">{t('settings.theme.system')}</span>
+            </label>
+          </div>
+          <div className="flex items-center gap-3 mt-3">
+            <ThemeToggle
+              value={theme === 'dark' ? 'dark' : 'light'}
+              disabled={theme === 'system'}
+              onChange={setTheme}
+            />
+            <span className={theme === 'system' ? 'text-sm text-ink-faint' : 'text-sm text-ink-soft'}>
+              {theme === 'dark' ? t('settings.theme.dark') : t('settings.theme.light')}
+            </span>
           </div>
         </div>
 
         <div>
           <Label>{t('settings.language')}</Label>
-          <div className="flex flex-wrap justify-center gap-2 mt-2">
-            <Button variant={language === 'system' ? 'default' : 'outline'} onClick={() => setLanguage('system')} className="w-[calc((100%_-_16px)/3)] min-h-[52px] px-2 text-xs">
-              {t('settings.language.system')}
-            </Button>
-            {SUPPORTED_LANGUAGES.map((l) => (
-              <Button key={l.code} variant={language === l.code ? 'default' : 'outline'} onClick={() => setLanguage(l.code)} className="w-[calc((100%_-_16px)/3)] min-h-[52px] px-2 text-xs">
-                {t(l.labelKey)}
-              </Button>
-            ))}
+          <div className="mt-2">
+            <label className="inline-flex items-center gap-2.5 cursor-pointer select-none">
+              <RoundCheckbox checked={language === 'system'} onChange={handleLanguageSystemToggle} />
+              <Monitor className="w-4 h-4 text-ink-soft" />
+              <span className="text-sm font-medium text-ink">{t('settings.language.system')}</span>
+            </label>
           </div>
+          <select
+            value={languageValue}
+            disabled={language === 'system'}
+            onChange={(e) => setLanguage(e.target.value)}
+            className="mt-3 w-full h-10 rounded-xl border border-border bg-surface px-3 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {SUPPORTED_LANGUAGES.map((l) => (
+              <option key={l.code} value={l.code}>{t(l.labelKey)}</option>
+            ))}
+          </select>
         </div>
 
         <div>
