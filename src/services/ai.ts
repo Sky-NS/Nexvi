@@ -1,5 +1,6 @@
 import { TripPreferences } from '@/types/trip';
 import { format, eachDayOfInterval } from 'date-fns';
+import { TEST_MODE, AI_PROXY_URL } from '@/config';
 
 const ACTIVITY_LIMITS: Record<string, string> = {
   relaxed: '1-2',
@@ -211,7 +212,22 @@ ${params.preferences.wishes?.trim() ? `🌟 Обязательные пожел�
   let response: Response;
 
   try {
-    if (provider === 'openai') {
+    if (TEST_MODE) {
+      if (!AI_PROXY_URL) throw new Error('Прокси для тестового режима не настроен (VITE_AI_PROXY_URL).');
+      response = await fetch(AI_PROXY_URL, {
+        method: 'POST',
+        signal: controller.signal,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [
+            { role: 'system', content: SYSTEM_PROMPT },
+            { role: 'user', content: userPrompt },
+          ],
+          max_tokens: 12000,
+          temperature: 0.7,
+        }),
+      });
+    } else if (provider === 'openai') {
       response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         signal: controller.signal,
@@ -271,7 +287,7 @@ ${params.preferences.wishes?.trim() ? `🌟 Обязательные пожел�
   }
 
   const data = await response.json();
-  const content = provider === 'gemini'
+  const content = (!TEST_MODE && provider === 'gemini')
     ? data.candidates?.[0]?.content?.parts?.[0]?.text || ''
     : data.choices?.[0]?.message?.content || '';
 
