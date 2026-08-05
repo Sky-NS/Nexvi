@@ -1,15 +1,58 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --color-bg: #F6F6FA;
+  --color-surface: #FFFFFF;
+
+  --color-ink: #17172E;
+  --color-ink-soft: #63627D;
+  --color-ink-faint: #9998AC;
+
+  --color-border: #E6E5F1;
+  --color-border-soft: #EFEEF7;
+
+  --color-brand: #3E35C6;
+  --color-brand-dark: #2E27A0;
+  --color-brand-soft: #EDEBFB;
+
+  --color-amber: #D98E2B;
+  --color-amber-dark: #B8741E;
+  --color-amber-soft: #FBF0DC;
+
+  --color-success: #1F9D6B;
+  --color-success-soft: #E6F7EF;
+  --color-danger: #D6483D;
+  --color-danger-soft: #FBEAE8;
+
+  --shadow-card: 0 1px 2px 0 rgb(23 23 46 / 0.04), 0 8px 24px -12px rgb(23 23 46 / 0.14);
+  --shadow-card-hover: 0 2px 6px 0 rgb(23 23 46 / 0.06), 0 20px 32px -14px rgb(23 23 46 / 0.18);
+  --shadow-pop: 0 12px 40px -8px rgb(23 23 46 / 0.28);
+}
+
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --radius: 0.5rem;
-  }
   body {
-    @apply bg-gray-50 text-gray-900 antialiased;
+    @apply bg-bg text-ink antialiased;
+  }
+  ::selection {
+    background-color: var(--color-brand-soft);
+    color: var(--color-brand-dark);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  .nx-fade-in {
+    animation: nxFadeIn 0.35s ease both;
+  }
+  @keyframes nxFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nx-fade-in { animation: none !important; }
   }
 }

@@ -9,7 +9,7 @@ function App() {
   return (
     <LanguageProvider>
       <HashRouter>
-        <div className="min-h-screen bg-gray-50 text-gray-900">
+        <div className="min-h-screen bg-bg text-ink">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/wizard" element={<TripWizard />} />
