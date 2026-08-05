@@ -10,6 +10,7 @@ import { InstallPrompt } from '@/components/InstallPrompt';
 import { Button } from '@/components/ui/Button';
 import { useTranslation } from '@/i18n/LanguageContext';
 import { Plus, Settings } from 'lucide-react';
+import { TEST_MODE } from '@/config';
 
 // Free-tier cap. Bump this (or wire it to a real plan lookup) once paid
 // subscriptions exist.
@@ -24,7 +25,7 @@ export default function HomePage() {
   const [showNoKeyDialog, setShowNoKeyDialog] = useState(false);
 
   const handleCreate = () => {
-    if (!apiKey) { setShowNoKeyDialog(true); return; }
+    if (!TEST_MODE && !apiKey) { setShowNoKeyDialog(true); return; }
     if (trips.length >= MAX_FREE_TRIPS) { setShowLimitDialog(true); return; }
     navigate('/wizard');
   };

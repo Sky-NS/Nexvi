@@ -17,6 +17,7 @@ import { useTranslation } from '@/i18n/LanguageContext';
 import { LANGUAGE_NAMES } from '@/i18n/translations';
 import { getCurrencySymbol } from '@/lib/currencies';
 import { ArrowLeft, ArrowRight, Loader2, AlertCircle, User, Heart, Users, PartyPopper, Footprints, Bus, Car, KeyRound } from 'lucide-react';
+import { TEST_MODE } from '@/config';
 
 export default function TripWizard() {
   const navigate = useNavigate();
@@ -93,7 +94,7 @@ export default function TripWizard() {
   };
 
   const generate = async () => {
-    if (!apiKey) { setError(t('wizard.error.noApiKey')); return; }
+    if (!TEST_MODE && !apiKey) { setError(t('wizard.error.noApiKey')); return; }
     setLoading(true); setError('');
     try {
       const fullParams: GenerationParams = { ...params, preferredCurrency, languageName: LANGUAGE_NAMES[language] || 'English' };
