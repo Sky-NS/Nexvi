@@ -27,14 +27,59 @@
   --color-danger: #D6483D;
   --color-danger-soft: #FBEAE8;
 
+  /* Fixed scrim color for modal backdrops — intentionally NOT redefined in
+     .dark below, since a dim/darken overlay should look the same regardless
+     of the app's own theme (unlike --color-ink, which needs to flip). */
+  --color-overlay: #0A0A14;
+
   --shadow-card: 0 1px 2px 0 rgb(23 23 46 / 0.04), 0 8px 24px -12px rgb(23 23 46 / 0.14);
   --shadow-card-hover: 0 2px 6px 0 rgb(23 23 46 / 0.06), 0 20px 32px -14px rgb(23 23 46 / 0.18);
   --shadow-pop: 0 12px 40px -8px rgb(23 23 46 / 0.28);
 }
 
+/* Dark theme: redefines the same custom properties @theme registered above.
+   Every utility class (bg-ink, text-ink-soft, bg-surface, ...) already
+   compiles down to var(--color-*), so overriding the variables here is
+   enough to re-skin the whole app — no component needs a dark: variant. */
+.dark {
+  --color-bg: #100F1E;
+  --color-surface: #1B1A30;
+
+  --color-ink: #F1F0F8;
+  --color-ink-soft: #A6A4C4;
+  --color-ink-faint: #716F94;
+
+  --color-border: #322F52;
+  --color-border-soft: #26243F;
+
+  --color-brand: #5A51DB;
+  --color-brand-dark: #7069E8;
+  --color-brand-soft: #242051;
+
+  --color-amber: #E6AC55;
+  --color-amber-dark: #F0BE72;
+  --color-amber-soft: #362A14;
+
+  --color-success: #24A578;
+  --color-success-soft: #123322;
+  --color-danger: #D9584B;
+  --color-danger-soft: #3A1917;
+
+  --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.3), 0 8px 24px -12px rgb(0 0 0 / 0.5);
+  --shadow-card-hover: 0 2px 6px 0 rgb(0 0 0 / 0.35), 0 20px 32px -14px rgb(0 0 0 / 0.55);
+  --shadow-pop: 0 12px 40px -8px rgb(0 0 0 / 0.6);
+}
+
 @layer base {
+  html {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
   body {
     @apply bg-bg text-ink antialiased;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
   ::selection {
     background-color: var(--color-brand-soft);
