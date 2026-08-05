@@ -19,7 +19,7 @@ export const useSettingsStore = create<SettingsState>()(
   persist(
     (set) => ({
       apiKey: '',
-      provider: 'openai',
+      provider: 'deepseek',
       preferredCurrency: 'USD',
       language: 'system',
       theme: 'system',
