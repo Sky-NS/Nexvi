@@ -125,6 +125,10 @@ const ru: TranslationDict = {
   'install.iosBody': 'Нажмите «Поделиться», затем «На экран «Домой»», чтобы работать офлайн с уже созданными планами.',
   'install.dismiss': 'Не сейчас',
 
+  'settings.app': 'Приложение',
+  'settings.app.installed': 'Уже установлено на этом устройстве.',
+  'settings.app.unavailable': 'Установка недоступна в этом браузере.',
+
   'generating.title': 'Собираем ваш план',
   'generating.phrase1': 'Анализируем точку путешествия…',
   'generating.phrase2': 'Выбираем места…',
@@ -301,6 +305,10 @@ const en: TranslationDict = {
   'install.installButton': 'Install',
   'install.iosBody': 'Tap Share, then "Add to Home Screen", to use your already-generated trips offline.',
   'install.dismiss': 'Not now',
+
+  'settings.app': 'App',
+  'settings.app.installed': 'Already installed on this device.',
+  'settings.app.unavailable': "Installation isn't available in this browser.",
 
   'generating.title': 'Putting your plan together',
   'generating.phrase1': 'Analyzing your destination…',
