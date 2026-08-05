@@ -207,7 +207,11 @@ ${params.preferences.wishes?.trim() ? `🌟 Обязательные пожел�
 Верни ТОЛЬКО JSON.`;
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 30000);
+  // Generating up to 12000 tokens of structured JSON genuinely takes a
+  // while, especially for longer trips — 30s was cutting requests off
+  // mid-flight and surfacing a raw "signal is aborted without reason"
+  // browser error instead of ever reaching a real response.
+  const timeoutId = setTimeout(() => controller.abort(), 90000);
 
   let response: Response;
 
@@ -277,6 +281,11 @@ ${params.preferences.wishes?.trim() ? `🌟 Обязательные пожел�
         }
       );
     }
+  } catch (e: any) {
+    if (e?.name === 'AbortError') {
+      throw new Error('Генерация заняла слишком много времени. Попробуйте ещё раз — если повторится, попробуйте сократить число дней или сменить провайдера в настройках.');
+    }
+    throw e;
   } finally {
     clearTimeout(timeoutId);
   }
