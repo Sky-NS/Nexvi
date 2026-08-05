@@ -5,9 +5,10 @@ import { useSettingsStore } from '@/store/settingsStore';
 import { TripCard } from '@/components/TripCard';
 import { TripLimitDialog } from '@/components/TripLimitDialog';
 import { NoApiKeyDialog } from '@/components/NoApiKeyDialog';
+import { NexviMark } from '@/components/NexviMark';
 import { Button } from '@/components/ui/Button';
 import { useTranslation } from '@/i18n/LanguageContext';
-import { Plus, Settings, Plane } from 'lucide-react';
+import { Plus, Settings } from 'lucide-react';
 
 // Free-tier cap. Bump this (or wire it to a real plan lookup) once paid
 // subscriptions exist.
@@ -31,9 +32,7 @@ export default function HomePage() {
     <div className="nx-fade-in max-w-4xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-2xl bg-brand shadow-card flex items-center justify-center">
-            <Plane className="w-4 h-4 text-white" />
-          </div>
+          <NexviMark className="w-9 h-9 text-brand shrink-0" />
           <h1 className="text-xl font-extrabold tracking-tight text-ink">{t('app.name')}</h1>
         </div>
         <Button variant="ghost" size="icon" onClick={() => navigate('/settings')}><Settings className="w-4 h-4" /></Button>
@@ -41,9 +40,7 @@ export default function HomePage() {
 
       {trips.length === 0 ? (
         <div className="text-center py-16 px-6 bg-surface rounded-2xl border border-dashed border-border">
-          <div className="w-12 h-12 rounded-2xl bg-brand-soft flex items-center justify-center mx-auto mb-4">
-            <Plane className="w-5 h-5 text-brand" />
-          </div>
+          <NexviMark className="w-14 h-14 text-brand mx-auto mb-4" />
           <h2 className="text-xl font-bold text-ink mb-2">{t('home.emptyTitle')}</h2>
           <p className="text-sm text-ink-soft mb-6">{t('home.emptySubtitle')}</p>
           <Button onClick={handleCreate}><Plus className="w-4 h-4 mr-2" /> {t('home.createTrip')}</Button>
