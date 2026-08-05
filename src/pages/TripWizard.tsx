@@ -16,7 +16,7 @@ import { GeneratingOverlay } from '@/components/GeneratingOverlay';
 import { useTranslation } from '@/i18n/LanguageContext';
 import { LANGUAGE_NAMES } from '@/i18n/translations';
 import { getCurrencySymbol } from '@/lib/currencies';
-import { ArrowLeft, ArrowRight, Loader2, AlertCircle, User, Heart, Users, PartyPopper, Footprints, Bus, Car, KeyRound, Plus } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Loader2, AlertCircle, User, Heart, Users, PartyPopper, Footprints, Bus, Car, KeyRound } from 'lucide-react';
 import { CustomInterestDialog } from '@/components/CustomInterestDialog';
 import { TEST_MODE } from '@/config';
 
@@ -269,7 +269,7 @@ export default function TripWizard() {
                     onClick={() => up('interests', params.preferences.interests.filter((x) => x !== i))}>{i}</Button>
                 ))}
                 <Button variant="outline" size="sm" onClick={() => setShowCustomInterest(true)}>
-                  <Plus className="w-3.5 h-3.5 mr-1" />{t('wizard.customInterest.add')}
+                  {t('wizard.customInterest.add')}
                 </Button>
               </div>
             </div>
