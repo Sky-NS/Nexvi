@@ -68,7 +68,7 @@ export function ActivityItem({ activity, actIndex, totalActivities, currency, on
   };
 
   return (
-    <div className={`group border rounded-lg p-3 transition-colors ${activity.booked ? 'border-green-200 bg-green-50/40' : 'hover:border-gray-300'}`}>
+    <div className={`group border rounded-xl p-3 transition-colors ${activity.booked ? 'border-success/30 bg-success-soft/60' : 'hover:border-ink-faint'}`}>
       <div className="flex items-center gap-2">
         <Input
           value={activity.icon || ''}
@@ -77,11 +77,11 @@ export function ActivityItem({ activity, actIndex, totalActivities, currency, on
           className="w-11 h-9 text-center text-base shrink-0 px-0"
         />
         <Input value={activity.title} onChange={(e) => onUpdate((a) => ({ ...a, title: e.target.value }))} placeholder={t('activity.name')} className="flex-1 min-w-0 text-sm font-medium" />
-        {activity.booked && <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0" />}
+        {activity.booked && <CheckCircle2 className="w-4 h-4 text-success shrink-0" />}
         <div className="hidden sm:flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
           <Button variant="ghost" size="icon" disabled={actIndex === 0} onClick={() => onMove(-1)}><ChevronUp className="w-3 h-3" /></Button>
           <Button variant="ghost" size="icon" disabled={actIndex === totalActivities - 1} onClick={() => onMove(1)}><ChevronDown className="w-3 h-3" /></Button>
-          <Button variant="ghost" size="icon" className="text-red-500" onClick={onRemove}><Trash2 className="w-3 h-3" /></Button>
+          <Button variant="ghost" size="icon" className="text-danger" onClick={onRemove}><Trash2 className="w-3 h-3" /></Button>
         </div>
         <Button variant="ghost" size="icon" onClick={() => setExpanded(!expanded)} className="shrink-0"><GripVertical className={`w-4 h-4 transition-transform ${expanded ? 'rotate-90' : ''}`} /></Button>
       </div>
@@ -90,7 +90,7 @@ export function ActivityItem({ activity, actIndex, totalActivities, currency, on
       <div className="flex sm:hidden items-center justify-end gap-1 mt-1">
         <Button variant="ghost" size="icon" disabled={actIndex === 0} onClick={() => onMove(-1)}><ChevronUp className="w-3 h-3" /></Button>
         <Button variant="ghost" size="icon" disabled={actIndex === totalActivities - 1} onClick={() => onMove(1)}><ChevronDown className="w-3 h-3" /></Button>
-        <Button variant="ghost" size="icon" className="text-red-500" onClick={onRemove}><Trash2 className="w-3 h-3" /></Button>
+        <Button variant="ghost" size="icon" className="text-danger" onClick={onRemove}><Trash2 className="w-3 h-3" /></Button>
       </div>
 
       {expanded && (
@@ -126,7 +126,7 @@ export function ActivityItem({ activity, actIndex, totalActivities, currency, on
                 type="button"
                 onClick={() => cameraInputRef.current?.click()}
                 disabled={photoBusy}
-                className="h-16 rounded-lg border-2 border-dashed border-gray-200 text-gray-400 flex flex-col items-center justify-center gap-1 text-xs hover:border-gray-300"
+                className="h-16 rounded-lg border-2 border-dashed border-border text-ink-faint flex flex-col items-center justify-center gap-1 text-xs hover:border-brand hover:text-brand transition-colors"
               >
                 <Camera className="w-4 h-4" /> {t('activity.photoCamera')}
               </button>
@@ -134,20 +134,20 @@ export function ActivityItem({ activity, actIndex, totalActivities, currency, on
                 type="button"
                 onClick={() => galleryInputRef.current?.click()}
                 disabled={photoBusy}
-                className="h-16 rounded-lg border-2 border-dashed border-gray-200 text-gray-400 flex flex-col items-center justify-center gap-1 text-xs hover:border-gray-300"
+                className="h-16 rounded-lg border-2 border-dashed border-border text-ink-faint flex flex-col items-center justify-center gap-1 text-xs hover:border-brand hover:text-brand transition-colors"
               >
                 <Images className="w-4 h-4" /> {t('activity.photoGallery')}
               </button>
               <button
                 type="button"
                 onClick={() => setLinkMode(true)}
-                className="h-16 rounded-lg border-2 border-dashed border-gray-200 text-gray-400 flex flex-col items-center justify-center gap-1 text-xs hover:border-gray-300"
+                className="h-16 rounded-lg border-2 border-dashed border-border text-ink-faint flex flex-col items-center justify-center gap-1 text-xs hover:border-brand hover:text-brand transition-colors"
               >
                 <LinkIcon className="w-4 h-4" /> {t('activity.photoLink')}
               </button>
             </div>
           )}
-          {photoBusy && <p className="text-xs text-gray-400">{t('common.loading')}</p>}
+          {photoBusy && <p className="text-xs text-ink-faint">{t('common.loading')}</p>}
           <input ref={cameraInputRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => handleFile(e.target.files?.[0] || null)} />
           <input ref={galleryInputRef} type="file" accept="image/*" className="hidden" onChange={(e) => handleFile(e.target.files?.[0] || null)} />
 
@@ -158,16 +158,16 @@ export function ActivityItem({ activity, actIndex, totalActivities, currency, on
           </div>
           <div className="grid grid-cols-2 gap-3 items-center">
             <div className="flex items-center gap-1.5">
-              <span className="text-xs text-gray-400 shrink-0">{currency || '#'}</span>
+              <span className="text-xs text-ink-faint shrink-0">{currency || '#'}</span>
               <Input type="number" value={activity.cost ?? ''} onChange={(e) => onUpdate((a) => ({ ...a, cost: e.target.value === '' ? undefined : Number(e.target.value) }))} placeholder="0" className="text-sm" />
             </div>
             <Input value={activity.hours || ''} onChange={(e) => onUpdate((a) => ({ ...a, hours: e.target.value }))} placeholder={t('activity.hours')} className="text-sm" />
-            <label className="flex items-center gap-2 text-sm text-gray-600">
+            <label className="flex items-center gap-2 text-sm text-ink-soft">
               <Checkbox checked={!!activity.booked} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate((a) => ({ ...a, booked: e.target.checked }))} />
               {t('activity.booked')}
             </label>
             {mapsHref && (
-              <a href={mapsHref} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700">
+              <a href={mapsHref} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs text-ink-soft hover:text-brand transition-colors">
                 <MapPin className="w-3.5 h-3.5" /> {t('activity.openMap')}
               </a>
             )}

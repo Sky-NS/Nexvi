@@ -20,7 +20,7 @@ export function ScrollToTopButton() {
       type="button"
       onClick={() => window.scrollTo(0, 0)}
       aria-label={t('trip.scrollTop')}
-      className="fixed bottom-5 right-5 z-40 w-11 h-11 rounded-full bg-gray-900 text-white shadow-lg flex items-center justify-center active:scale-95 transition-transform"
+      className="fixed bottom-5 right-5 z-40 w-11 h-11 rounded-full bg-brand text-white shadow-pop flex items-center justify-center active:scale-95 transition-transform"
     >
       <ArrowUp className="w-5 h-5" />
     </button>

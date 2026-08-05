@@ -51,28 +51,28 @@ export function DateRangePicker({ startDate, endDate, onChange }: Props) {
 
   return (
     <div>
-      <div className="text-sm font-medium text-gray-700 mb-2 h-5">
+      <div className="text-sm font-semibold text-ink mb-2 h-5">
         {startDate && endDate
           ? t('wizard.datesSummary', { start: format(parseISO(startDate), 'd MMM', { locale }), end: format(parseISO(endDate), 'd MMM yyyy', { locale }), days: dayCount })
           : startDate
             ? format(parseISO(startDate), 'd MMMM yyyy', { locale })
-            : <span className="text-gray-400 font-normal">{t('wizard.datesPlaceholder')}</span>}
+            : <span className="text-ink-faint font-normal">{t('wizard.datesPlaceholder')}</span>}
       </div>
 
-      <div className="border rounded-lg p-3 bg-white">
+      <div className="border border-border rounded-2xl p-3 bg-surface">
         <div className="flex items-center justify-between mb-2">
-          <button type="button" onClick={() => setViewMonth((m) => subMonths(m, 1))} className="p-1.5 rounded-md hover:bg-gray-100" aria-label="Prev month">
+          <button type="button" onClick={() => setViewMonth((m) => subMonths(m, 1))} className="p-1.5 rounded-lg hover:bg-border-soft hover:text-brand transition-colors" aria-label="Prev month">
             <ChevronLeft className="w-4 h-4" />
           </button>
-          <span className="text-sm font-semibold capitalize">{format(viewMonth, 'LLLL yyyy', { locale })}</span>
-          <button type="button" onClick={() => setViewMonth((m) => addMonths(m, 1))} className="p-1.5 rounded-md hover:bg-gray-100" aria-label="Next month">
+          <span className="font-mono text-sm font-semibold capitalize">{format(viewMonth, 'LLLL yyyy', { locale })}</span>
+          <button type="button" onClick={() => setViewMonth((m) => addMonths(m, 1))} className="p-1.5 rounded-lg hover:bg-border-soft hover:text-brand transition-colors" aria-label="Next month">
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
 
         <div className="grid grid-cols-7 mb-1">
           {WEEKDAY_KEYS.map((k) => (
-            <div key={k} className="text-center text-[11px] font-medium text-gray-400 py-1">{t(k)}</div>
+            <div key={k} className="text-center text-[11px] font-mono font-semibold text-ink-faint py-1">{t(k)}</div>
           ))}
         </div>
 
@@ -93,13 +93,13 @@ export function DateRangePicker({ startDate, endDate, onChange }: Props) {
                   disabled={isPast}
                   onClick={() => handleDayClick(day)}
                   className={cn(
-                    'h-9 text-sm my-0.5 transition-colors',
-                    !inMonth && 'text-gray-300',
-                    isPast && 'text-gray-200 cursor-not-allowed',
-                    !isPast && inMonth && !isStart && !isEnd && 'hover:bg-gray-100',
-                    inRange && 'bg-gray-100',
-                    (isStart || isEnd) && 'bg-gray-900 text-white font-semibold rounded-full',
-                    isToday && !isStart && !isEnd && 'font-bold text-gray-900',
+                    'h-9 text-sm font-mono my-0.5 rounded-full transition-colors',
+                    !inMonth && 'text-ink-faint',
+                    isPast && 'text-ink-faint/50 cursor-not-allowed',
+                    !isPast && inMonth && !isStart && !isEnd && 'hover:bg-border-soft',
+                    inRange && 'bg-border-soft',
+                    (isStart || isEnd) && 'bg-brand text-white font-semibold rounded-full',
+                    isToday && !isStart && !isEnd && 'font-bold text-ink',
                   )}
                 >
                   {day.getDate()}

@@ -27,22 +27,22 @@ export function CurrencyPicker({ value, onChange }: Props) {
         onChange={(e) => { setQuery(e.target.value); setOpen(true); }}
         onFocus={() => { setQuery(''); setOpen(true); }}
         placeholder={t('settings.currencySearchPlaceholder')}
-        className="w-full h-10 rounded-md border border-gray-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900/10"
+        className="w-full h-10 rounded-xl border border-border bg-surface px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand"
       />
       {open && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className="absolute z-20 mt-1 w-full max-h-56 overflow-auto bg-white border rounded-lg shadow-lg">
-            {filtered.length === 0 && <div className="px-3 py-2 text-sm text-gray-400">{t('settings.currencyNotFound')}</div>}
+          <div className="absolute z-20 mt-1 w-full max-h-56 overflow-auto bg-surface border border-border rounded-xl shadow-pop">
+            {filtered.length === 0 && <div className="px-3 py-2 text-sm text-ink-faint">{t('settings.currencyNotFound')}</div>}
             {filtered.map((c) => (
               <button
                 key={c.code}
                 type="button"
                 onClick={() => { onChange(c.code); setOpen(false); setQuery(''); }}
-                className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 flex items-center justify-between gap-2"
+                className="w-full text-left px-3 py-2 text-sm hover:bg-bg flex items-center justify-between gap-2"
               >
-                <span className="truncate">{c.code} — {c.name}</span>
-                <span className="text-gray-400 shrink-0">{c.symbol}</span>
+                <span className="truncate"><span className="font-mono font-semibold">{c.code}</span> — {c.name}</span>
+                <span className="text-ink-faint shrink-0 font-mono">{c.symbol}</span>
               </button>
             ))}
           </div>

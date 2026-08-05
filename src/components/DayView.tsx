@@ -15,21 +15,25 @@ export function DayView({ day, currency }: Props) {
   const dayTotal = (day.route || []).reduce((s, r) => s + (r.cost || 0), 0) + day.activities.reduce((s, a) => s + (a.cost || 0), 0);
 
   return (
-    <div id={`day-${day.dayNumber}`} className="scroll-mt-4">
-      <div className="flex items-center gap-3 mb-3">
-        <span className="text-3xl leading-none shrink-0" aria-hidden>{day.icon || '📍'}</span>
-        <div className="min-w-0">
-          <p className="text-xs font-medium text-gray-400 uppercase tracking-wide">
-            {t('day.numberLabel', { n: day.dayNumber })} · {format(parseISO(day.date), 'd MMMM', { locale })}
+    <div id={`day-${day.dayNumber}`} className="nx-fade-in scroll-mt-4">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="w-11 h-11 rounded-2xl bg-brand-soft flex items-center justify-center shrink-0">
+          <span className="font-mono font-bold text-brand text-base">{String(day.dayNumber).padStart(2, '0')}</span>
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="font-mono text-[11px] font-medium text-ink-faint uppercase tracking-wider">
+            {format(parseISO(day.date), 'd MMMM', { locale })}
           </p>
-          <h3 className="font-bold text-lg text-gray-900 leading-snug truncate">{day.title || '—'}</h3>
+          <h3 className="font-bold text-lg text-ink leading-snug truncate">
+            <span aria-hidden>{day.icon || '📍'}</span> {day.title || '—'}
+          </h3>
         </div>
       </div>
 
       {day.route && day.route.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 mb-3">
+        <div className="flex flex-wrap gap-1.5 mb-3 ml-0.5">
           {day.route.map((leg) => (
-            <span key={leg.id} className="inline-flex items-center gap-1 text-xs bg-gray-100 text-gray-600 rounded-full px-2.5 py-1">
+            <span key={leg.id} className="inline-flex items-center gap-1 text-xs bg-border-soft text-ink-soft rounded-full px-2.5 py-1">
               {leg.from || '?'} → {leg.to || '?'}
               {leg.mode ? ` · ${leg.mode}` : ''}
               {typeof leg.cost === 'number' && leg.cost > 0 ? ` · ${currency}${leg.cost}` : ''}
@@ -45,9 +49,9 @@ export function DayView({ day, currency }: Props) {
       </div>
 
       {dayTotal > 0 && (
-        <div className="flex items-center justify-between text-sm mt-2.5 px-1">
-          <span className="text-gray-400">{t('day.total')}</span>
-          <span className="font-semibold text-gray-700">{currency}{dayTotal}</span>
+        <div className="flex items-center justify-between text-sm mt-3 px-1">
+          <span className="text-ink-faint">{t('day.total')}</span>
+          <span className="font-mono font-semibold text-ink">{currency}{dayTotal}</span>
         </div>
       )}
     </div>

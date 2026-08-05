@@ -27,11 +27,11 @@ export function DayCard(props: Props) {
   const dayTotal = (day.route || []).reduce((s, r) => s + (r.cost || 0), 0) + day.activities.reduce((s, a) => s + (a.cost || 0), 0);
 
   return (
-    <div id={`day-${day.dayNumber}`} className="bg-white rounded-xl shadow-sm border p-4 md:p-6 scroll-mt-4">
+    <div id={`day-${day.dayNumber}`} className="bg-surface rounded-2xl shadow-card border border-border p-4 md:p-6 scroll-mt-4">
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
-            <Label className="text-xs text-gray-500">{t('day.numberLabel', { n: day.dayNumber })}</Label>
+            <Label>{t('day.numberLabel', { n: day.dayNumber })}</Label>
             <div className="flex items-center gap-2">
               <Input
                 value={day.icon || ''}
@@ -43,14 +43,14 @@ export function DayCard(props: Props) {
             </div>
           </div>
           <div>
-            <Label className="text-xs text-gray-500">{t('day.date')}</Label>
+            <Label>{t('day.date')}</Label>
             <Input type="date" value={day.date} onChange={(e) => onUpdateDay((d) => ({ ...d, date: e.target.value }))} className="border-0 px-0 focus-visible:ring-0" />
           </div>
         </div>
         <div className="flex items-center gap-1 ml-2">
           <Button variant="ghost" size="icon" disabled={dayIndex === 0} onClick={() => onMoveDay(-1)}><ChevronUp className="w-4 h-4" /></Button>
           <Button variant="ghost" size="icon" disabled={dayIndex === totalDays - 1} onClick={() => onMoveDay(1)}><ChevronDown className="w-4 h-4" /></Button>
-          <Button variant="ghost" size="icon" className="text-red-500" onClick={onRemoveDay}><Trash2 className="w-4 h-4" /></Button>
+          <Button variant="ghost" size="icon" className="text-danger" onClick={onRemoveDay}><Trash2 className="w-4 h-4" /></Button>
         </div>
       </div>
 
@@ -61,13 +61,13 @@ export function DayCard(props: Props) {
           <ActivityItem key={a.id} activity={a} actIndex={i} totalActivities={day.activities.length} currency={currency}
             onUpdate={(u) => onUpdateActivity(i, u)} onRemove={() => onRemoveActivity(i)} onMove={(d) => onMoveActivity(i, d)} />
         ))}
-        <Button variant="ghost" className="w-full text-gray-500" onClick={onAddActivity}><Plus className="w-4 h-4 mr-2" /> {t('day.addActivity')}</Button>
+        <Button variant="ghost" className="w-full text-ink-soft" onClick={onAddActivity}><Plus className="w-4 h-4 mr-2" /> {t('day.addActivity')}</Button>
       </div>
 
       {dayTotal > 0 && (
-        <div className="mt-4 pt-3 border-t flex items-center justify-between text-sm">
-          <span className="text-gray-500">{t('day.total')}</span>
-          <span className="font-semibold">{currency}{dayTotal}</span>
+        <div className="mt-4 pt-3 border-t border-border-soft flex items-center justify-between text-sm">
+          <span className="text-ink-soft">{t('day.total')}</span>
+          <span className="font-mono font-semibold text-ink">{currency}{dayTotal}</span>
         </div>
       )}
     </div>

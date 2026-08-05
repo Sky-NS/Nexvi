@@ -20,11 +20,11 @@ export function BudgetSummary({ trip }: Props) {
   if (grandTotal === 0) return null;
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border p-4 md:p-6 mt-6">
-      <h3 className="font-semibold mb-3">{t('budget.heading')}</h3>
+    <div className="bg-surface rounded-2xl shadow-card border border-border p-4 md:p-6 mt-6">
+      <h3 className="font-bold text-lg text-ink mb-4">{t('budget.heading')}</h3>
       <table className="w-full text-sm">
         <thead>
-          <tr className="text-left text-gray-400 text-xs border-b">
+          <tr className="text-left text-ink-faint text-[11px] font-semibold uppercase tracking-wider border-b border-border-soft">
             <th className="pb-2 font-medium">{t('budget.day')}</th>
             <th className="pb-2 font-medium">{t('budget.date')}</th>
             <th className="pb-2 font-medium text-right">{t('budget.amount')}</th>
@@ -32,15 +32,15 @@ export function BudgetSummary({ trip }: Props) {
         </thead>
         <tbody>
           {rows.map(({ day, total }) => (
-            <tr key={day.dayNumber} className="border-b last:border-0">
+            <tr key={day.dayNumber} className="border-b border-border-soft last:border-0">
               <td className="py-2">{t('day.numberLabel', { n: day.dayNumber })}</td>
-              <td className="py-2 text-gray-500">{format(parseISO(day.date), 'd MMM', { locale })}</td>
-              <td className="py-2 text-right">{currency}{total}</td>
+              <td className="py-2 text-ink-soft">{format(parseISO(day.date), 'd MMM', { locale })}</td>
+              <td className="py-2 text-right font-mono">{currency}{total}</td>
             </tr>
           ))}
-          <tr className="font-semibold">
+          <tr className="font-bold text-ink">
             <td className="py-2" colSpan={2}>{t('budget.total')}</td>
-            <td className="py-2 text-right">{currency}{grandTotal}</td>
+            <td className="py-2 text-right font-mono text-brand">{currency}{grandTotal}</td>
           </tr>
         </tbody>
       </table>
