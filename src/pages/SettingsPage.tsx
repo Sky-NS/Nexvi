@@ -58,27 +58,27 @@ export default function SettingsPage() {
 
         <div>
           <Label>{t('settings.theme')}</Label>
-          <div className="flex gap-2 mt-2 flex-wrap">
-            <Button variant={theme === 'system' ? 'default' : 'outline'} onClick={() => setTheme('system')}>
-              <Monitor className="w-4 h-4 mr-2" />{t('settings.theme.system')}
+          <div className="flex flex-wrap justify-center gap-2 mt-2">
+            <Button variant={theme === 'system' ? 'default' : 'outline'} onClick={() => setTheme('system')} className="w-[calc((100%_-_16px)/3)] min-h-[52px] px-2 text-xs">
+              <Monitor className="w-4 h-4 mr-1.5 shrink-0" />{t('settings.theme.system')}
             </Button>
-            <Button variant={theme === 'light' ? 'default' : 'outline'} onClick={() => setTheme('light')}>
-              <Sun className="w-4 h-4 mr-2" />{t('settings.theme.light')}
+            <Button variant={theme === 'light' ? 'default' : 'outline'} onClick={() => setTheme('light')} className="w-[calc((100%_-_16px)/3)] min-h-[52px] px-2 text-xs">
+              <Sun className="w-4 h-4 mr-1.5 shrink-0" />{t('settings.theme.light')}
             </Button>
-            <Button variant={theme === 'dark' ? 'default' : 'outline'} onClick={() => setTheme('dark')}>
-              <Moon className="w-4 h-4 mr-2" />{t('settings.theme.dark')}
+            <Button variant={theme === 'dark' ? 'default' : 'outline'} onClick={() => setTheme('dark')} className="w-[calc((100%_-_16px)/3)] min-h-[52px] px-2 text-xs">
+              <Moon className="w-4 h-4 mr-1.5 shrink-0" />{t('settings.theme.dark')}
             </Button>
           </div>
         </div>
 
         <div>
           <Label>{t('settings.language')}</Label>
-          <div className="flex gap-2 mt-2 flex-wrap">
-            <Button variant={language === 'system' ? 'default' : 'outline'} onClick={() => setLanguage('system')}>
+          <div className="flex flex-wrap justify-center gap-2 mt-2">
+            <Button variant={language === 'system' ? 'default' : 'outline'} onClick={() => setLanguage('system')} className="w-[calc((100%_-_16px)/3)] min-h-[52px] px-2 text-xs">
               {t('settings.language.system')}
             </Button>
             {SUPPORTED_LANGUAGES.map((l) => (
-              <Button key={l.code} variant={language === l.code ? 'default' : 'outline'} onClick={() => setLanguage(l.code)}>
+              <Button key={l.code} variant={language === l.code ? 'default' : 'outline'} onClick={() => setLanguage(l.code)} className="w-[calc((100%_-_16px)/3)] min-h-[52px] px-2 text-xs">
                 {t(l.labelKey)}
               </Button>
             ))}
