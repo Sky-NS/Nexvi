@@ -119,6 +119,12 @@ const ru: TranslationDict = {
   'settings.theme.light': 'Светлая',
   'settings.theme.dark': 'Тёмная',
 
+  'install.title': 'Установите Nexvi',
+  'install.body': 'Работает даже офлайн — уже созданные планы открываются без интернета.',
+  'install.installButton': 'Установить',
+  'install.iosBody': 'Нажмите «Поделиться», затем «На экран «Домой»», чтобы работать офлайн с уже созданными планами.',
+  'install.dismiss': 'Не сейчас',
+
   'generating.title': 'Собираем ваш план',
   'generating.phrase1': 'Анализируем точку путешествия…',
   'generating.phrase2': 'Выбираем места…',
@@ -289,6 +295,12 @@ const en: TranslationDict = {
   'settings.theme.system': 'System default',
   'settings.theme.light': 'Light',
   'settings.theme.dark': 'Dark',
+
+  'install.title': 'Install Nexvi',
+  'install.body': 'Works offline too — trips you already generated open without an internet connection.',
+  'install.installButton': 'Install',
+  'install.iosBody': 'Tap Share, then "Add to Home Screen", to use your already-generated trips offline.',
+  'install.dismiss': 'Not now',
 
   'generating.title': 'Putting your plan together',
   'generating.phrase1': 'Analyzing your destination…',
