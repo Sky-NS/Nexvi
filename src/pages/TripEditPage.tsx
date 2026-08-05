@@ -63,17 +63,17 @@ export default function TripEditPage() {
 
   return (
     <div className="nx-fade-in max-w-4xl mx-auto px-4 py-6 md:py-8">
-      <div className="flex items-center justify-between gap-3 mb-6">
-        <div className="flex items-center gap-2 min-w-0">
-          <Button variant="ghost" size="sm" onClick={() => navigate('/')}><ArrowLeft className="w-4 h-4" /></Button>
-          <div className="min-w-0">
+      <div className="mb-6">
+        <div className="flex items-center gap-2 mb-3">
+          <Button variant="ghost" size="sm" onClick={() => navigate('/')} className="shrink-0"><ArrowLeft className="w-4 h-4" /></Button>
+          <div className="min-w-0 flex-1">
             <h1 className="text-xl md:text-2xl font-extrabold tracking-tight text-ink truncate">{localTrip.destination}</h1>
             <p className="text-xs md:text-sm font-mono text-ink-soft mt-0.5">
               {format(parseISO(localTrip.startDate), 'd MMM', { locale })} — {format(parseISO(localTrip.endDate), 'd MMM yyyy', { locale })} · {localTrip.travelers} {t('common.people')}
             </p>
           </div>
         </div>
-        <div className="flex gap-2 shrink-0">
+        <div className="flex gap-2 pl-1">
           {!isEditing && <ExportPdfButton trip={localTrip} />}
           {isEditing ? (
             <Button onClick={finishEditing}><Check className="w-4 h-4 mr-2" />{t('common.done')}</Button>
