@@ -6,6 +6,7 @@ import { TripCard } from '@/components/TripCard';
 import { TripLimitDialog } from '@/components/TripLimitDialog';
 import { NoApiKeyDialog } from '@/components/NoApiKeyDialog';
 import { NexviMark } from '@/components/NexviMark';
+import { InstallPrompt } from '@/components/InstallPrompt';
 import { Button } from '@/components/ui/Button';
 import { useTranslation } from '@/i18n/LanguageContext';
 import { Plus, Settings } from 'lucide-react';
@@ -37,6 +38,8 @@ export default function HomePage() {
         </div>
         <Button variant="ghost" size="icon" onClick={() => navigate('/settings')}><Settings className="w-4 h-4" /></Button>
       </div>
+
+      <InstallPrompt />
 
       {trips.length === 0 ? (
         <div className="text-center py-16 px-6 bg-surface rounded-2xl border border-dashed border-border">
