@@ -4,7 +4,7 @@
 export type TranslationDict = Record<string, string>;
 
 const ru: TranslationDict = {
-  'app.name': 'Nexvi',
+  'app.name': 'Voyafio',
 
   'common.back': 'Назад',
   'common.next': 'Далее',
@@ -124,7 +124,7 @@ const ru: TranslationDict = {
   'settings.theme.light': 'Светлая',
   'settings.theme.dark': 'Тёмная',
 
-  'install.title': 'Установите Nexvi',
+  'install.title': 'Установите Voyafio',
   'install.body': 'Работает даже офлайн — уже созданные планы открываются без интернета.',
   'install.installButton': 'Установить',
   'install.iosBody': 'Нажмите «Поделиться», затем «На экран «Домой»», чтобы работать офлайн с уже созданными планами.',
@@ -191,7 +191,7 @@ const ru: TranslationDict = {
 };
 
 const en: TranslationDict = {
-  'app.name': 'Nexvi',
+  'app.name': 'Voyafio',
 
   'common.back': 'Back',
   'common.next': 'Next',
@@ -311,7 +311,7 @@ const en: TranslationDict = {
   'settings.theme.light': 'Light',
   'settings.theme.dark': 'Dark',
 
-  'install.title': 'Install Nexvi',
+  'install.title': 'Install Voyafio',
   'install.body': 'Works offline too — trips you already generated open without an internet connection.',
   'install.installButton': 'Install',
   'install.iosBody': 'Tap Share, then "Add to Home Screen", to use your already-generated trips offline.',
