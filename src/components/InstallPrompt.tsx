@@ -3,7 +3,7 @@ import { Download, X } from 'lucide-react';
 import { useTranslation } from '@/i18n/LanguageContext';
 import { useInstallPrompt } from '@/hooks/useInstallPrompt';
 import { Button } from '@/components/ui/Button';
-import { NexviMark } from '@/components/NexviMark';
+import { VoyafioMark } from '@/components/VoyafioMark';
 
 const DISMISSED_KEY = 'nexvi-install-dismissed';
 
@@ -28,7 +28,7 @@ export function InstallPrompt() {
 
   return (
     <div className="nx-fade-in flex items-start gap-3 bg-brand-soft border border-brand/20 rounded-2xl p-4 mb-6">
-      <NexviMark className="w-9 h-9 text-brand shrink-0" />
+      <VoyafioMark className="w-9 h-9 text-brand shrink-0" />
       <div className="flex-1 min-w-0">
         <p className="font-bold text-ink">{t('install.title')}</p>
         <p className="text-sm text-ink-soft mt-0.5">{canInstall ? t('install.body') : t('install.iosBody')}</p>

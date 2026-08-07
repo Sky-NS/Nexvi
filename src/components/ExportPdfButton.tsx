@@ -14,7 +14,7 @@ const PAGE_H = 297;
 const PAGE_W = 210;
 const CONTENT_W = PAGE_W - MARGIN * 2;
 
-// Nexvi palette as RGB triples (mirrors the CSS tokens in index.css) so the
+// Voyafio palette as RGB triples (mirrors the CSS tokens in index.css) so the
 // PDF reads as the same product as the web app, not a generic gray report.
 const COLOR = {
   ink: [23, 23, 46] as [number, number, number],
