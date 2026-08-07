@@ -4,7 +4,7 @@
 export type TranslationDict = Record<string, string>;
 
 const ru: TranslationDict = {
-  'app.name': 'Voyafio',
+  'app.name': 'Roamvas',
 
   'common.back': 'Назад',
   'common.next': 'Далее',
@@ -23,7 +23,7 @@ const ru: TranslationDict = {
   'home.createTrip': 'Создать поездку',
   'home.newTrip': 'Новая поездка',
   'home.importPlan': 'Импортировать план',
-  'home.importError': 'Не удалось прочитать файл — похоже, это не файл плана Voyafio.',
+  'home.importError': 'Не удалось прочитать файл — похоже, это не файл плана Roamvas.',
 
   'limit.title': 'Достигнут лимит поездок',
   'limit.body': 'Бесплатно доступно до {max} сохранённых поездок. Удалите одну из существующих или оформите подписку, чтобы создавать больше.',
@@ -126,7 +126,7 @@ const ru: TranslationDict = {
   'settings.theme.light': 'Светлая',
   'settings.theme.dark': 'Тёмная',
 
-  'install.title': 'Установите Voyafio',
+  'install.title': 'Установите Roamvas',
   'install.body': 'Работает даже офлайн — уже созданные планы открываются без интернета.',
   'install.installButton': 'Установить',
   'install.iosBody': 'Нажмите «Поделиться», затем «На экран «Домой»», чтобы работать офлайн с уже созданными планами.',
@@ -196,7 +196,7 @@ const ru: TranslationDict = {
 };
 
 const en: TranslationDict = {
-  'app.name': 'Voyafio',
+  'app.name': 'Roamvas',
 
   'common.back': 'Back',
   'common.next': 'Next',
@@ -215,7 +215,7 @@ const en: TranslationDict = {
   'home.createTrip': 'Create a trip',
   'home.newTrip': 'New trip',
   'home.importPlan': 'Import a plan',
-  'home.importError': "Couldn't read that file — it doesn't look like a Voyafio plan file.",
+  'home.importError': "Couldn't read that file — it doesn't look like a Roamvas plan file.",
 
   'limit.title': 'Trip limit reached',
   'limit.body': 'Up to {max} saved trips are available for free. Delete an existing one, or subscribe to create more.',
@@ -318,7 +318,7 @@ const en: TranslationDict = {
   'settings.theme.light': 'Light',
   'settings.theme.dark': 'Dark',
 
-  'install.title': 'Install Voyafio',
+  'install.title': 'Install Roamvas',
   'install.body': 'Works offline too — trips you already generated open without an internet connection.',
   'install.installButton': 'Install',
   'install.iosBody': 'Tap Share, then "Add to Home Screen", to use your already-generated trips offline.',
