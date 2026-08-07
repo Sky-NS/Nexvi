@@ -90,6 +90,16 @@
     outline-offset: 2px;
     border-radius: 4px;
   }
+  /* iOS Safari auto-zooms the page when a focused input's text is under
+     16px — and because this is a single-page app, that zoom then persists
+     across in-app navigation instead of resetting per "page". Touch-only
+     devices get a 16px floor on form fields; desktop keeps the smaller
+     sizes used elsewhere for denser layouts. */
+  @media (hover: none) and (pointer: coarse) {
+    input, select, textarea {
+      font-size: 16px !important;
+    }
+  }
   .nx-fade-in {
     animation: nxFadeIn 0.35s ease;
   }

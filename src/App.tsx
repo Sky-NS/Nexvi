@@ -12,7 +12,10 @@ function App() {
   return (
     <LanguageProvider>
       <HashRouter>
-        <div className="min-h-screen bg-bg text-ink">
+        <div
+          className="min-h-screen bg-bg text-ink"
+          style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}
+        >
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/wizard" element={<TripWizard />} />
