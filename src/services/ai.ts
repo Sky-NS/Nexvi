@@ -74,7 +74,7 @@ export interface GenerationParams {
   startDate: string;
   endDate: string;
   travelers: number;
-  budget?: string;
+  budget?: 'economy' | 'comfort' | 'premium';
   preferredCurrency: string;
   languageName: string;
   preferences: TripPreferences;
