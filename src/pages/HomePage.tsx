@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTripStore } from '@/store/tripStore';
 import { useSettingsStore } from '@/store/settingsStore';
@@ -9,8 +9,9 @@ import { VoyafioMark } from '@/components/VoyafioMark';
 import { InstallPrompt } from '@/components/InstallPrompt';
 import { Button } from '@/components/ui/Button';
 import { useTranslation } from '@/i18n/LanguageContext';
-import { Plus, Settings } from 'lucide-react';
+import { Plus, Settings, Upload, AlertCircle } from 'lucide-react';
 import { TEST_MODE } from '@/config';
+import { parseTripFile } from '@/lib/tripFile';
 
 // Free-tier cap. Bump this (or wire it to a real plan lookup) once paid
 // subscriptions exist.
@@ -19,10 +20,12 @@ const MAX_FREE_TRIPS = 3;
 export default function HomePage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { trips, deleteTrip, setCurrentTrip } = useTripStore();
+  const { trips, deleteTrip, setCurrentTrip, addTrip } = useTripStore();
   const { apiKey } = useSettingsStore();
   const [showLimitDialog, setShowLimitDialog] = useState(false);
   const [showNoKeyDialog, setShowNoKeyDialog] = useState(false);
+  const [importError, setImportError] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleCreate = () => {
     if (!TEST_MODE && !apiKey) { setShowNoKeyDialog(true); return; }
@@ -30,15 +33,49 @@ export default function HomePage() {
     navigate('/wizard');
   };
 
+  const handleImportClick = () => {
+    setImportError('');
+    if (trips.length >= MAX_FREE_TRIPS) { setShowLimitDialog(true); return; }
+    fileInputRef.current?.click();
+  };
+
+  const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = ''; // so re-selecting the same file still fires onChange
+    if (!file) return;
+
+    try {
+      const content = await file.text();
+      const result = parseTripFile(content);
+      if ('error' in result) { setImportError(t('home.importError')); return; }
+      addTrip(result.trip);
+      setCurrentTrip(result.trip);
+      navigate(`/trip/${result.trip.id}`);
+    } catch {
+      setImportError(t('home.importError'));
+    }
+  };
+
   return (
     <div className="nx-fade-in max-w-4xl mx-auto px-4 py-8">
+      <input ref={fileInputRef} type="file" accept=".json,application/json" onChange={handleFileSelected} className="hidden" />
+
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-2.5">
           <VoyafioMark className="w-9 h-9 text-brand shrink-0" />
           <h1 className="text-xl font-extrabold tracking-tight text-ink">{t('app.name')}</h1>
         </div>
-        <Button variant="ghost" size="icon" onClick={() => navigate('/settings')}><Settings className="w-4 h-4" /></Button>
+        <div className="flex items-center gap-1">
+          <Button variant="ghost" size="icon" onClick={handleImportClick} aria-label={t('home.importPlan')}><Upload className="w-4 h-4" /></Button>
+          <Button variant="ghost" size="icon" onClick={() => navigate('/settings')}><Settings className="w-4 h-4" /></Button>
+        </div>
       </div>
+
+      {importError && (
+        <div className="mb-6 p-3 bg-danger-soft text-danger rounded-lg flex items-center gap-2 text-sm">
+          <AlertCircle className="w-4 h-4 shrink-0" /> {importError}
+        </div>
+      )}
 
       <InstallPrompt />
 
@@ -48,6 +85,9 @@ export default function HomePage() {
           <h2 className="text-xl font-bold text-ink mb-2">{t('home.emptyTitle')}</h2>
           <p className="text-sm text-ink-soft mb-6">{t('home.emptySubtitle')}</p>
           <Button onClick={handleCreate}><Plus className="w-4 h-4 mr-2" /> {t('home.createTrip')}</Button>
+          <div>
+            <Button variant="ghost" size="sm" className="mt-2" onClick={handleImportClick}><Upload className="w-3.5 h-3.5 mr-1.5" />{t('home.importPlan')}</Button>
+          </div>
         </div>
       ) : (
         <>
@@ -61,7 +101,10 @@ export default function HomePage() {
               />
             ))}
           </div>
-          <Button variant="outline" onClick={handleCreate}><Plus className="w-4 h-4 mr-2" /> {t('home.newTrip')}</Button>
+          <div className="flex gap-2 flex-wrap">
+            <Button variant="outline" onClick={handleCreate}><Plus className="w-4 h-4 mr-2" /> {t('home.newTrip')}</Button>
+            <Button variant="ghost" onClick={handleImportClick}><Upload className="w-4 h-4 mr-2" />{t('home.importPlan')}</Button>
+          </div>
         </>
       )}
 

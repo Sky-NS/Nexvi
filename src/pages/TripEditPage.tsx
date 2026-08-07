@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useTripStore } from '@/store/tripStore';
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, addDays } from 'date-fns';
 import { ru, enUS } from 'date-fns/locale';
 import { Button } from '@/components/ui/Button';
 import { DayCard } from '@/components/DayCard';
@@ -12,8 +12,9 @@ import { BudgetSummary } from '@/components/BudgetSummary';
 import { ExportPdfButton } from '@/components/ExportPdfButton';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import { useTranslation } from '@/i18n/LanguageContext';
-import { ArrowLeft, Plus, Check, Pencil } from 'lucide-react';
+import { ArrowLeft, Plus, Check, Pencil, Share2 } from 'lucide-react';
 import { DayPlan, Activity, RouteLeg } from '@/types/trip';
+import { exportTripToFile } from '@/lib/tripFile';
 
 export default function TripEditPage() {
   const { id } = useParams<{ id: string }>();
@@ -45,10 +46,19 @@ export default function TripEditPage() {
 
   const currency = localTrip.currency || '';
 
+  // Dates are meant to be sequential from the trip's start date — this keeps
+  // both dayNumber and date correct after any reorder/add/remove, instead of
+  // a date staying attached to whichever day's content got moved.
+  const recalcDates = (days: DayPlan[]): DayPlan[] => {
+    if (!localTrip.startDate) return days.map((d, idx) => ({ ...d, dayNumber: idx + 1 }));
+    const start = parseISO(localTrip.startDate);
+    return days.map((d, idx) => ({ ...d, dayNumber: idx + 1, date: format(addDays(start, idx), 'yyyy-MM-dd') }));
+  };
+
   const updDay = (i: number, u: (d: DayPlan) => DayPlan) => setLocalTrip((p) => { if (!p) return p; const d = [...p.days]; d[i] = u(d[i]); return { ...p, days: d, updatedAt: new Date().toISOString() }; });
-  const addDay = () => setLocalTrip((p) => { if (!p) return p; const last = p.days[p.days.length - 1]; const nd = last ? format(new Date(new Date(last.date).getTime() + 86400000), 'yyyy-MM-dd') : p.startDate; return { ...p, days: [...p.days, { dayNumber: p.days.length + 1, date: nd, title: t('wizard.dayFallback', { n: p.days.length + 1 }), icon: '📍', route: [], activities: [] }], updatedAt: new Date().toISOString() }; });
-  const rmDay = (i: number) => setLocalTrip((p) => { if (!p) return p; const d = p.days.filter((_, idx) => idx !== i).map((x, idx) => ({ ...x, dayNumber: idx + 1 })); return { ...p, days: d, updatedAt: new Date().toISOString() }; });
-  const mvDay = (i: number, dir: -1 | 1) => { const ni = i + dir; if (ni < 0 || ni >= localTrip.days.length) return; setLocalTrip((p) => { if (!p) return p; const d = [...p.days]; [d[i], d[ni]] = [d[ni], d[i]]; return { ...p, days: d.map((x, idx) => ({ ...x, dayNumber: idx + 1 })), updatedAt: new Date().toISOString() }; }); };
+  const addDay = () => setLocalTrip((p) => { if (!p) return p; const nd: DayPlan = { dayNumber: p.days.length + 1, date: '', title: t('wizard.dayFallback', { n: p.days.length + 1 }), icon: '📍', route: [], activities: [] }; return { ...p, days: recalcDates([...p.days, nd]), updatedAt: new Date().toISOString() }; });
+  const rmDay = (i: number) => setLocalTrip((p) => { if (!p) return p; return { ...p, days: recalcDates(p.days.filter((_, idx) => idx !== i)), updatedAt: new Date().toISOString() }; });
+  const mvDay = (i: number, dir: -1 | 1) => { const ni = i + dir; if (ni < 0 || ni >= localTrip.days.length) return; setLocalTrip((p) => { if (!p) return p; const d = [...p.days]; [d[i], d[ni]] = [d[ni], d[i]]; return { ...p, days: recalcDates(d), updatedAt: new Date().toISOString() }; }); };
 
   const addAct = (i: number) => updDay(i, (d) => ({ ...d, activities: [...d.activities, { id: uuidv4(), title: t('wizard.activityFallback'), description: '', location: '', notes: '', icon: '📍', booked: false, bookingNote: '' }] }));
   const updAct = (di: number, ai: number, u: (a: Activity) => Activity) => updDay(di, (d) => { const a = [...d.activities]; a[ai] = u(a[ai]); return { ...d, activities: a }; });
@@ -73,8 +83,9 @@ export default function TripEditPage() {
             </p>
           </div>
         </div>
-        <div className="flex gap-2 justify-center">
+        <div className="flex gap-2 justify-center flex-wrap">
           {!isEditing && <ExportPdfButton trip={localTrip} />}
+          {!isEditing && <Button variant="outline" onClick={() => exportTripToFile(localTrip)}><Share2 className="w-4 h-4 mr-2" />{t('trip.share')}</Button>}
           {isEditing ? (
             <Button onClick={finishEditing}><Check className="w-4 h-4 mr-2" />{t('common.done')}</Button>
           ) : (
@@ -89,6 +100,7 @@ export default function TripEditPage() {
         <div className="space-y-4">
           {localTrip.days.map((day, i) => (
             <DayCard key={day.dayNumber} day={day} dayIndex={i} totalDays={localTrip.days.length} currency={currency}
+              otherDates={localTrip.days.filter((_, idx) => idx !== i).map((d) => d.date).filter(Boolean)}
               onUpdateDay={(u) => updDay(i, u)} onRemoveDay={() => rmDay(i)} onMoveDay={(d) => mvDay(i, d)}
               onAddActivity={() => addAct(i)} onUpdateActivity={(ai, u) => updAct(i, ai, u)} onRemoveActivity={(ai) => rmAct(i, ai)} onMoveActivity={(ai, d) => mvAct(i, ai, d)}
               onAddRoute={() => addRoute(i)} onUpdateRoute={(ri, u) => updRoute(i, ri, u)} onRemoveRoute={(ri) => rmRoute(i, ri)} />
