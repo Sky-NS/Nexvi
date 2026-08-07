@@ -12,9 +12,10 @@ import { BudgetSummary } from '@/components/BudgetSummary';
 import { ExportPdfButton } from '@/components/ExportPdfButton';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import { useTranslation } from '@/i18n/LanguageContext';
-import { ArrowLeft, Plus, Check, Pencil, Share2 } from 'lucide-react';
+import { ArrowLeft, Plus, Check, Pencil, Share2, Loader2 } from 'lucide-react';
 import { DayPlan, Activity, RouteLeg } from '@/types/trip';
 import { exportTripToFile } from '@/lib/tripFile';
+import { useActionFeedback } from '@/hooks/useActionFeedback';
 
 export default function TripEditPage() {
   const { id } = useParams<{ id: string }>();
@@ -25,6 +26,7 @@ export default function TripEditPage() {
   const trip = useMemo(() => trips.find((tr) => tr.id === id), [trips, id]);
   const [localTrip, setLocalTrip] = useState(() => trip);
   const [isEditing, setIsEditing] = useState(false);
+  const shareFeedback = useActionFeedback();
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // While editing, save quietly in the background so nothing is lost if the
@@ -85,7 +87,14 @@ export default function TripEditPage() {
         </div>
         <div className="flex gap-2 justify-center flex-wrap">
           {!isEditing && <ExportPdfButton trip={localTrip} />}
-          {!isEditing && <Button variant="outline" onClick={() => exportTripToFile(localTrip)}><Share2 className="w-4 h-4 mr-2" />{t('trip.share')}</Button>}
+          {!isEditing && (
+            <Button variant="outline" onClick={() => shareFeedback.run(() => exportTripToFile(localTrip))} disabled={shareFeedback.state !== 'idle'}>
+              {shareFeedback.state === 'processing' && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              {shareFeedback.state === 'done' && <Check className="w-4 h-4 mr-2" />}
+              {shareFeedback.state === 'idle' && <Share2 className="w-4 h-4 mr-2" />}
+              {shareFeedback.state === 'done' ? t('common.done') : t('trip.share')}
+            </Button>
+          )}
           {isEditing ? (
             <Button onClick={finishEditing}><Check className="w-4 h-4 mr-2" />{t('common.done')}</Button>
           ) : (
