@@ -1,11 +1,15 @@
+import { useState } from 'react';
+import { format, parseISO } from 'date-fns';
+import { ru, enUS } from 'date-fns/locale';
 import { DayPlan, Activity, RouteLeg } from '@/types/trip';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { ActivityItem } from './ActivityItem';
 import { RouteCard } from './RouteCard';
+import { SingleDatePickerDialog } from './SingleDatePickerDialog';
 import { useTranslation } from '@/i18n/LanguageContext';
-import { Plus, Trash2, ChevronUp, ChevronDown } from 'lucide-react';
+import { Plus, Trash2, ChevronUp, ChevronDown, Calendar } from 'lucide-react';
 
 interface Props {
   day: DayPlan; dayIndex: number; totalDays: number; currency: string;
@@ -22,36 +26,50 @@ interface Props {
 
 export function DayCard(props: Props) {
   const { day, dayIndex, totalDays, currency, onUpdateDay, onRemoveDay, onMoveDay, onAddActivity, onUpdateActivity, onRemoveActivity, onMoveActivity, onAddRoute, onUpdateRoute, onRemoveRoute } = props;
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
+  const locale = language === 'ru' ? ru : enUS;
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const dayTotal = (day.route || []).reduce((s, r) => s + (r.cost || 0), 0) + day.activities.reduce((s, a) => s + (a.cost || 0), 0);
 
   return (
     <div id={`day-${day.dayNumber}`} className="bg-surface rounded-2xl shadow-card border border-border p-4 md:p-6 scroll-mt-4">
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div>
-            <Label>{t('day.numberLabel', { n: day.dayNumber })}</Label>
-            <div className="flex items-center gap-2">
-              <Input
-                value={day.icon || ''}
-                onChange={(e) => onUpdateDay((d) => ({ ...d, icon: e.target.value }))}
-                placeholder="📍"
-                className="w-11 h-9 text-center text-base shrink-0 px-0"
-              />
-              <Input value={day.title} onChange={(e) => onUpdateDay((d) => ({ ...d, title: e.target.value }))} className="font-semibold text-lg border-0 px-0 focus-visible:ring-0 flex-1 min-w-0" placeholder={t('day.title')} />
-            </div>
-          </div>
-          <div>
-            <Label>{t('day.date')}</Label>
-            <Input type="date" value={day.date} onChange={(e) => onUpdateDay((d) => ({ ...d, date: e.target.value }))} className="border-0 px-0 focus-visible:ring-0" />
-          </div>
-        </div>
-        <div className="flex items-center gap-1 ml-2">
+      <div className="flex items-center justify-between mb-2">
+        <Label className="mb-0">{t('day.numberLabel', { n: day.dayNumber })}</Label>
+        <div className="flex items-center gap-1 -mr-2">
           <Button variant="ghost" size="icon" disabled={dayIndex === 0} onClick={() => onMoveDay(-1)}><ChevronUp className="w-4 h-4" /></Button>
           <Button variant="ghost" size="icon" disabled={dayIndex === totalDays - 1} onClick={() => onMoveDay(1)}><ChevronDown className="w-4 h-4" /></Button>
           <Button variant="ghost" size="icon" className="text-danger" onClick={onRemoveDay}><Trash2 className="w-4 h-4" /></Button>
         </div>
+      </div>
+
+      <div className="flex items-center gap-2 mb-3">
+        <Input
+          value={day.icon || ''}
+          onChange={(e) => onUpdateDay((d) => ({ ...d, icon: e.target.value }))}
+          placeholder="📍"
+          className="w-11 h-9 text-center text-base shrink-0 px-0"
+        />
+        <Input value={day.title} onChange={(e) => onUpdateDay((d) => ({ ...d, title: e.target.value }))} className="font-semibold text-lg border-0 px-0 focus-visible:ring-0 flex-1 min-w-0" placeholder={t('day.title')} />
+      </div>
+
+      <div className="mb-4">
+        <Label>{t('day.date')}</Label>
+        <button
+          type="button"
+          onClick={() => setShowDatePicker(true)}
+          className="w-full flex items-center gap-2 h-10 rounded-xl border border-border bg-surface px-3 text-sm text-ink hover:border-brand transition-colors"
+        >
+          <Calendar className="w-4 h-4 text-ink-faint shrink-0" />
+          {day.date ? format(parseISO(day.date), 'd MMMM yyyy', { locale }) : <span className="text-ink-faint">{t('day.date')}</span>}
+        </button>
+        {showDatePicker && (
+          <SingleDatePickerDialog
+            value={day.date}
+            onClose={() => setShowDatePicker(false)}
+            onChange={(newDate) => onUpdateDay((d) => ({ ...d, date: newDate }))}
+          />
+        )}
       </div>
 
       <RouteCard route={day.route || []} currency={currency} onAdd={onAddRoute} onUpdate={onUpdateRoute} onRemove={onRemoveRoute} />
