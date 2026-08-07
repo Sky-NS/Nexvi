@@ -88,6 +88,7 @@ export default function TripWizard() {
     if (!params.destination.trim()) return t('wizard.error.destination');
     if (!params.startDate || !params.endDate) return t('wizard.error.dates');
     if (new Date(params.startDate) > new Date(params.endDate)) return t('wizard.error.dateOrder');
+    if (!params.travelers || params.travelers < 1) return t('wizard.error.travelers');
     return '';
   };
   const v2 = () => {
@@ -171,8 +172,16 @@ export default function TripWizard() {
               {showTravelersInput && (
                 <div className="mt-2">
                   <Label>{t('wizard.exactTravelers')}</Label>
-                  <Input type="number" min={1} value={params.travelers}
-                    onChange={(e) => setParams({ ...params, travelers: parseInt(e.target.value) || 1 })} />
+                  <Input
+                    type="number" min={1}
+                    value={params.travelers === 0 ? '' : params.travelers}
+                    onFocus={(e) => e.target.select()}
+                    onChange={(e) => {
+                      const raw = e.target.value;
+                      const num = raw === '' ? 0 : parseInt(raw, 10);
+                      setParams({ ...params, travelers: Number.isNaN(num) ? 0 : num });
+                    }}
+                  />
                 </div>
               )}
               {!showTravelersInput && (
