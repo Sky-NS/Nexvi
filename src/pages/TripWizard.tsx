@@ -18,6 +18,7 @@ import { LANGUAGE_NAMES } from '@/i18n/translations';
 import { getCurrencySymbol } from '@/lib/currencies';
 import { ArrowLeft, ArrowRight, Loader2, AlertCircle, User, Heart, Users, PartyPopper, Footprints, Bus, Car, KeyRound } from 'lucide-react';
 import { CustomInterestDialog } from '@/components/CustomInterestDialog';
+import { CustomBudgetDialog } from '@/components/CustomBudgetDialog';
 import { TEST_MODE } from '@/config';
 
 export default function TripWizard() {
@@ -29,6 +30,7 @@ export default function TripWizard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showCustomInterest, setShowCustomInterest] = useState(false);
+  const [showCustomBudget, setShowCustomBudget] = useState(false);
 
   const PACE = [
     { value: 'relaxed' as const, label: t('wizard.pace.relaxed'), desc: t('wizard.pace.relaxedDesc') },
@@ -105,7 +107,7 @@ export default function TripWizard() {
       const currencySymbol = getCurrencySymbol(preferredCurrency);
       const trip: Trip = {
         id: uuidv4(), destination: plan.destination || params.destination, startDate: params.startDate, endDate: params.endDate,
-        travelers: params.travelers, budget: params.budget as any, currency: currencySymbol, preferences: params.preferences,
+        travelers: params.travelers, budget: params.budget, currency: currencySymbol, preferences: params.preferences,
         days: plan.days?.map((d: any, i: number) => ({
           dayNumber: d.dayNumber || i + 1, date: d.date || format(parseISO(params.startDate), 'yyyy-MM-dd'),
           title: d.title || t('wizard.dayFallback', { n: i + 1 }), icon: d.icon || '📍',
@@ -128,6 +130,7 @@ export default function TripWizard() {
   };
 
   const showTravelersInput = params.preferences.travelGroup === 'family' || params.preferences.travelGroup === 'group';
+  const isCustomBudget = !!params.budget && !['economy', 'comfort', 'premium'].includes(params.budget);
 
   return (
     <div className="nx-fade-in max-w-2xl mx-auto px-4 py-8">
@@ -219,13 +222,22 @@ export default function TripWizard() {
 
             <div>
               <Label>{t('wizard.budget')}</Label>
-              <select className="w-full h-10 rounded-xl border border-border bg-surface px-3 py-2 text-sm text-ink"
-                value={params.budget || ''} onChange={(e) => setParams({ ...params, budget: e.target.value || undefined })}>
-                <option value="">{t('common.notSpecified')}</option>
-                <option value="economy">{t('wizard.budget.economy')}</option>
-                <option value="comfort">{t('wizard.budget.comfort')}</option>
-                <option value="premium">{t('wizard.budget.premium')}</option>
-              </select>
+              <div className="flex flex-wrap gap-2 mt-2">
+                <Button variant={!params.budget ? 'default' : 'outline'} size="sm" onClick={() => setParams({ ...params, budget: undefined })}>{t('common.notSpecified')}</Button>
+                <Button variant={params.budget === 'economy' ? 'default' : 'outline'} size="sm" onClick={() => setParams({ ...params, budget: 'economy' })}>{t('wizard.budget.economy')}</Button>
+                <Button variant={params.budget === 'comfort' ? 'default' : 'outline'} size="sm" onClick={() => setParams({ ...params, budget: 'comfort' })}>{t('wizard.budget.comfort')}</Button>
+                <Button variant={params.budget === 'premium' ? 'default' : 'outline'} size="sm" onClick={() => setParams({ ...params, budget: 'premium' })}>{t('wizard.budget.premium')}</Button>
+                <Button variant={isCustomBudget ? 'default' : 'outline'} size="sm" className="max-w-[180px]" onClick={() => setShowCustomBudget(true)}>
+                  <span className="truncate">{isCustomBudget ? params.budget : t('wizard.budget.other')}</span>
+                </Button>
+              </div>
+              {showCustomBudget && (
+                <CustomBudgetDialog
+                  initial={isCustomBudget ? (params.budget as string) : ''}
+                  onClose={() => setShowCustomBudget(false)}
+                  onSave={(value) => setParams({ ...params, budget: value })}
+                />
+              )}
             </div>
 
             <Button className="w-full mt-2" onClick={() => { const err = v1(); if (err) setError(err); else { setError(''); setStep(2); } }}>
