@@ -28,7 +28,7 @@ export function InstallPrompt() {
 
   return (
     <div className="nx-fade-in flex items-start gap-3 bg-brand-soft border border-brand/20 rounded-2xl p-4 mb-6">
-      <RoamvasMark className="w-9 h-9 text-brand shrink-0" />
+      <RoamvasMark className="w-10 h-10 rounded-xl shadow-card shrink-0" />
       <div className="flex-1 min-w-0">
         <p className="font-bold text-ink">{t('install.title')}</p>
         <p className="text-sm text-ink-soft mt-0.5">{canInstall ? t('install.body') : t('install.iosBody')}</p>
