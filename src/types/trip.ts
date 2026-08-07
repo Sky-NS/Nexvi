@@ -52,7 +52,7 @@ export interface Trip {
   startDate: string;
   endDate: string;
   travelers: number;
-  budget?: 'economy' | 'comfort' | 'premium';
+  budget?: string;
   currency?: string;
   preferences: TripPreferences;
   days: DayPlan[];
