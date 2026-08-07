@@ -1,4 +1,4 @@
-name: Deploy Voyafio to GitHub Pages
+name: Deploy Roamvas to GitHub Pages
 
 on:
   push:
