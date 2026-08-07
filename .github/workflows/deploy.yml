@@ -1,4 +1,4 @@
-name: Deploy Nexvi to GitHub Pages
+name: Deploy Voyafio to GitHub Pages
 
 on:
   push:
