@@ -6,6 +6,7 @@ import { TripCard } from '@/components/TripCard';
 import { TripLimitDialog } from '@/components/TripLimitDialog';
 import { NoApiKeyDialog } from '@/components/NoApiKeyDialog';
 import { RoamvasMark } from '@/components/RoamvasMark';
+import { RoamvasWordmark } from '@/components/RoamvasWordmark';
 import { InstallPrompt } from '@/components/InstallPrompt';
 import { Button } from '@/components/ui/Button';
 import { useTranslation } from '@/i18n/LanguageContext';
@@ -60,12 +61,13 @@ export default function HomePage() {
     <div className="nx-fade-in max-w-4xl mx-auto px-4 py-8">
       <input ref={fileInputRef} type="file" accept=".json,application/json" onChange={handleFileSelected} className="hidden" />
 
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-2.5">
-          <RoamvasMark className="w-9 h-9 text-brand shrink-0" />
-          <h1 className="text-xl font-extrabold tracking-tight text-ink">{t('app.name')}</h1>
+      <div className="relative mb-8 pt-1">
+        <div className="flex flex-col items-center gap-3">
+          <RoamvasMark className="w-16 h-16 rounded-2xl shadow-card" />
+          <h1 className="sr-only">{t('app.name')}</h1>
+          <RoamvasWordmark className="h-6 w-auto" />
         </div>
-        <div className="flex items-center gap-1">
+        <div className="absolute top-0 right-0 flex items-center gap-1">
           <Button variant="ghost" size="icon" onClick={handleImportClick} aria-label={t('home.importPlan')}><Upload className="w-4 h-4" /></Button>
           <Button variant="ghost" size="icon" onClick={() => navigate('/settings')}><Settings className="w-4 h-4" /></Button>
         </div>
@@ -81,7 +83,7 @@ export default function HomePage() {
 
       {trips.length === 0 ? (
         <div className="text-center py-16 px-6 bg-surface rounded-2xl border border-dashed border-border">
-          <RoamvasMark className="w-14 h-14 text-brand mx-auto mb-4" />
+          <RoamvasMark className="w-16 h-16 rounded-2xl shadow-card mx-auto mb-4" />
           <h2 className="text-xl font-bold text-ink mb-2">{t('home.emptyTitle')}</h2>
           <p className="text-sm text-ink-soft mb-6">{t('home.emptySubtitle')}</p>
           <Button onClick={handleCreate}><Plus className="w-4 h-4 mr-2" /> {t('home.createTrip')}</Button>
