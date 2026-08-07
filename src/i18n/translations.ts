@@ -15,7 +15,6 @@ const ru: TranslationDict = {
   'common.cancel': 'Отмена',
   'common.add': 'Добавить',
   'common.loading': 'Загрузка…',
-  'common.notSpecified': 'Не указан',
   'common.free': 'Бесплатно',
   'common.people': 'чел.',
 
@@ -23,6 +22,8 @@ const ru: TranslationDict = {
   'home.emptySubtitle': 'Опишите направление и стиль поездки — маршрут по дням соберёт ИИ.',
   'home.createTrip': 'Создать поездку',
   'home.newTrip': 'Новая поездка',
+  'home.importPlan': 'Импортировать план',
+  'home.importError': 'Не удалось прочитать файл — похоже, это не файл плана Voyafio.',
 
   'limit.title': 'Достигнут лимит поездок',
   'limit.body': 'Бесплатно доступно до {max} сохранённых поездок. Удалите одну из существующих или оформите подписку, чтобы создавать больше.',
@@ -57,9 +58,6 @@ const ru: TranslationDict = {
   'wizard.budget.economy': 'Эконом',
   'wizard.budget.comfort': 'Комфорт',
   'wizard.budget.premium': 'Премиум',
-  'wizard.budget.other': 'Другое',
-  'wizard.customBudget.title': 'Свой вариант бюджета',
-  'wizard.customBudget.placeholder': 'Например: до 50 000 ₽ на человека',
   'wizard.step2.heading': 'Шаг 2: Стиль путешествия',
   'wizard.vacationType': 'Тип отдыха',
   'wizard.type.beach': 'Пляжный',
@@ -152,11 +150,14 @@ const ru: TranslationDict = {
   'trip.goHome': 'На главную',
   'trip.addDay': 'Добавить день',
   'trip.scrollTop': 'Наверх',
+  'trip.share': 'Поделиться',
 
   'day.title': 'Заголовок дня',
   'day.numberLabel': 'День {n}',
   'day.label': 'День {n}: {title}',
   'day.date': 'Дата',
+  'day.dateTaken': 'Эта дата уже занята другим днём',
+  'day.dateTakenHint': 'Зачёркнутые даты уже заняты другими днями поездки.',
   'day.addActivity': 'Добавить активность',
   'day.total': 'Итого за день',
 
@@ -206,7 +207,6 @@ const en: TranslationDict = {
   'common.cancel': 'Cancel',
   'common.add': 'Add',
   'common.loading': 'Loading…',
-  'common.notSpecified': 'Not specified',
   'common.free': 'Free',
   'common.people': 'people',
 
@@ -214,6 +214,8 @@ const en: TranslationDict = {
   'home.emptySubtitle': 'Describe your destination and travel style — AI will put together a day-by-day itinerary.',
   'home.createTrip': 'Create a trip',
   'home.newTrip': 'New trip',
+  'home.importPlan': 'Import a plan',
+  'home.importError': "Couldn't read that file — it doesn't look like a Voyafio plan file.",
 
   'limit.title': 'Trip limit reached',
   'limit.body': 'Up to {max} saved trips are available for free. Delete an existing one, or subscribe to create more.',
@@ -248,9 +250,6 @@ const en: TranslationDict = {
   'wizard.budget.economy': 'Economy',
   'wizard.budget.comfort': 'Comfort',
   'wizard.budget.premium': 'Premium',
-  'wizard.budget.other': 'Other',
-  'wizard.customBudget.title': 'Your own budget',
-  'wizard.customBudget.placeholder': 'E.g.: up to $500 per person',
   'wizard.step2.heading': 'Step 2: Travel style',
   'wizard.vacationType': 'Type of vacation',
   'wizard.type.beach': 'Beach',
@@ -343,11 +342,14 @@ const en: TranslationDict = {
   'trip.goHome': 'Go home',
   'trip.addDay': 'Add day',
   'trip.scrollTop': 'Scroll to top',
+  'trip.share': 'Share',
 
   'day.title': 'Day title',
   'day.numberLabel': 'Day {n}',
   'day.label': 'Day {n}: {title}',
   'day.date': 'Date',
+  'day.dateTaken': 'Already used by another day',
+  'day.dateTakenHint': 'Crossed-out dates are already used by other days in this trip.',
   'day.addActivity': 'Add activity',
   'day.total': 'Day total',
 
