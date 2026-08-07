@@ -8,8 +8,8 @@ createRoot(document.getElementById('root')!).render(
 );
 
 // Registered after load so it never competes with the initial page render.
-// BASE_URL accounts for deployments under a subpath (e.g. GitHub Pages'
-// /Nexvi/) as well as a plain root deployment.
+// BASE_URL accounts for deployments under a subpath (e.g. a GitHub Pages
+// repo path) as well as a plain root deployment.
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(() => {});
