@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Trip } from '@/types/trip';
 
-const FILE_APP_ID = 'voyafio';
+const FILE_APP_ID = 'roamvas';
 const FILE_VERSION = 1;
 
 function sanitizeFilename(name: string): string {
