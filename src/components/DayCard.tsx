@@ -13,6 +13,7 @@ import { Plus, Trash2, ChevronUp, ChevronDown, Calendar } from 'lucide-react';
 
 interface Props {
   day: DayPlan; dayIndex: number; totalDays: number; currency: string;
+  otherDates: string[];
   onUpdateDay: (u: (d: DayPlan) => DayPlan) => void;
   onRemoveDay: () => void; onMoveDay: (dir: -1 | 1) => void;
   onAddActivity: () => void;
@@ -25,7 +26,7 @@ interface Props {
 }
 
 export function DayCard(props: Props) {
-  const { day, dayIndex, totalDays, currency, onUpdateDay, onRemoveDay, onMoveDay, onAddActivity, onUpdateActivity, onRemoveActivity, onMoveActivity, onAddRoute, onUpdateRoute, onRemoveRoute } = props;
+  const { day, dayIndex, totalDays, currency, otherDates, onUpdateDay, onRemoveDay, onMoveDay, onAddActivity, onUpdateActivity, onRemoveActivity, onMoveActivity, onAddRoute, onUpdateRoute, onRemoveRoute } = props;
   const { t, language } = useTranslation();
   const locale = language === 'ru' ? ru : enUS;
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -66,6 +67,7 @@ export function DayCard(props: Props) {
         {showDatePicker && (
           <SingleDatePickerDialog
             value={day.date}
+            disabledDates={otherDates}
             onClose={() => setShowDatePicker(false)}
             onChange={(newDate) => onUpdateDay((d) => ({ ...d, date: newDate }))}
           />

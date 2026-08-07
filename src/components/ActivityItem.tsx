@@ -1,5 +1,6 @@
 import { Activity } from '@/types/trip';
 import { Input } from '@/components/ui/Input';
+import { Textarea } from '@/components/ui/Textarea';
 import { Button } from '@/components/ui/Button';
 import { Checkbox } from '@/components/ui/Checkbox';
 import { useTranslation } from '@/i18n/LanguageContext';
@@ -153,8 +154,8 @@ export function ActivityItem({ activity, actIndex, totalActivities, currency, on
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <Input value={activity.location} onChange={(e) => onUpdate((a) => ({ ...a, location: e.target.value }))} placeholder={t('activity.location')} className="text-sm" />
-            <Input value={activity.description} onChange={(e) => onUpdate((a) => ({ ...a, description: e.target.value }))} placeholder={t('activity.description')} className="text-sm" />
-            <Input value={activity.notes} onChange={(e) => onUpdate((a) => ({ ...a, notes: e.target.value }))} placeholder={t('activity.notes')} className="text-sm md:col-span-2" />
+            <Textarea value={activity.description} onChange={(e) => onUpdate((a) => ({ ...a, description: e.target.value }))} placeholder={t('activity.description')} className="text-sm" />
+            <Textarea value={activity.notes} onChange={(e) => onUpdate((a) => ({ ...a, notes: e.target.value }))} placeholder={t('activity.notes')} className="text-sm md:col-span-2" />
           </div>
           <div className="grid grid-cols-2 gap-3 items-center">
             <div className="flex items-center gap-1.5">

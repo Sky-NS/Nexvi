@@ -12,11 +12,13 @@ interface Props {
   value: string; // 'yyyy-MM-dd'
   onChange: (date: string) => void;
   onClose: () => void;
+  /** Dates already used by other days in this trip — shown but not selectable. */
+  disabledDates?: string[];
 }
 
 const WEEKDAY_KEYS = ['daterange.mon', 'daterange.tue', 'daterange.wed', 'daterange.thu', 'daterange.fri', 'daterange.sat', 'daterange.sun'];
 
-export function SingleDatePickerDialog({ value, onChange, onClose }: Props) {
+export function SingleDatePickerDialog({ value, onChange, onClose, disabledDates = [] }: Props) {
   const { t, language } = useTranslation();
   const locale = language === 'ru' ? ru : enUS;
   const [viewMonth, setViewMonth] = useState(() => startOfMonth(value ? parseISO(value) : new Date()));
@@ -32,7 +34,8 @@ export function SingleDatePickerDialog({ value, onChange, onClose }: Props) {
     return rows;
   }, [viewMonth]);
 
-  const handlePick = (day: Date) => {
+  const handlePick = (day: Date, isTaken: boolean) => {
+    if (isTaken) return;
     onChange(format(day, 'yyyy-MM-dd'));
     onClose();
   };
@@ -63,15 +66,19 @@ export function SingleDatePickerDialog({ value, onChange, onClose }: Props) {
               const inMonth = isSameMonth(day, viewMonth);
               const isSelected = iso === value;
               const isToday = iso === format(new Date(), 'yyyy-MM-dd');
+              const isTaken = !isSelected && disabledDates.includes(iso);
               return (
                 <button
                   key={iso}
                   type="button"
-                  onClick={() => handlePick(day)}
+                  disabled={isTaken}
+                  onClick={() => handlePick(day, isTaken)}
+                  title={isTaken ? t('day.dateTaken') : undefined}
                   className={cn(
                     'h-10 text-sm font-mono my-0.5 rounded-full transition-colors',
                     !inMonth && 'text-ink-faint',
-                    !isSelected && 'hover:bg-border-soft',
+                    isTaken && 'text-ink-faint/40 cursor-not-allowed line-through',
+                    !isSelected && !isTaken && 'hover:bg-border-soft',
                     isSelected && 'bg-brand text-white font-semibold',
                     isToday && !isSelected && 'font-bold text-ink',
                   )}
@@ -82,6 +89,10 @@ export function SingleDatePickerDialog({ value, onChange, onClose }: Props) {
             })}
           </div>
         ))}
+
+        {disabledDates.length > 0 && (
+          <p className="text-xs text-ink-faint mt-2 px-1">{t('day.dateTakenHint')}</p>
+        )}
       </div>
     </div>
   );
