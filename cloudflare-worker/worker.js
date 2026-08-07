@@ -1,4 +1,4 @@
-// Nexvi test-mode proxy — deploy this on Cloudflare Workers (free tier is
+// Roamvas test-mode proxy — deploy this on Cloudflare Workers (free tier is
 // plenty). It holds the real DeepSeek API key server-side and forwards
 // generation requests to DeepSeek on the app's behalf, so the key never
 // ships in the browser bundle the way it would if entered in Settings.
@@ -9,7 +9,7 @@
 //        - DEEPSEEK_API_KEY  (type: Secret)  → your real DeepSeek key
 //        - ALLOWED_ORIGIN    (type: Text)    → e.g. https://yourname.github.io
 //   3. Deploy, then copy the Worker's *.workers.dev URL — that's what goes
-//      into the Nexvi repo's VITE_AI_PROXY_URL (see .env.example).
+//      into the Roamvas repo's VITE_AI_PROXY_URL (see .env.example).
 //
 // This only accepts requests from ALLOWED_ORIGIN and only forwards
 // `messages`/`max_tokens`/`temperature` — the model is fixed server-side so
