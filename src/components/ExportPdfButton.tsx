@@ -1,11 +1,12 @@
 import { Trip } from '@/types/trip';
 import { Button } from '@/components/ui/Button';
-import { FileDown } from 'lucide-react';
+import { FileDown, Loader2, Check } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import { format, parseISO } from 'date-fns';
 import { ru, enUS } from 'date-fns/locale';
 import { useTranslation } from '@/i18n/LanguageContext';
 import { LIBERATION_SANS_REGULAR_BASE64, LIBERATION_SANS_BOLD_BASE64 } from '@/lib/pdfFonts';
+import { useActionFeedback } from '@/hooks/useActionFeedback';
 
 interface Props { trip: Trip; }
 
@@ -55,8 +56,9 @@ function registerFonts(doc: jsPDF) {
 export function ExportPdfButton({ trip }: Props) {
   const { t, language } = useTranslation();
   const locale = language === 'ru' ? ru : enUS;
+  const { state, run } = useActionFeedback();
 
-  const handleExport = () => {
+  const handleExport = () => run(() => {
     const doc = new jsPDF({ unit: 'mm', format: 'a4' });
     registerFonts(doc);
     const currency = trip.currency || '';
@@ -217,7 +219,14 @@ export function ExportPdfButton({ trip }: Props) {
 
     const safeName = trip.destination.replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-+|-+$/g, '') || 'trip';
     doc.save(`${safeName}.pdf`);
-  };
+  });
 
-  return <Button variant="outline" onClick={handleExport}><FileDown className="w-4 h-4 mr-2" /> PDF</Button>;
+  return (
+    <Button variant="outline" onClick={handleExport} disabled={state !== 'idle'}>
+      {state === 'processing' && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+      {state === 'done' && <Check className="w-4 h-4 mr-2" />}
+      {state === 'idle' && <FileDown className="w-4 h-4 mr-2" />}
+      {state === 'done' ? t('common.done') : 'PDF'}
+    </Button>
+  );
 }
