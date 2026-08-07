@@ -3,6 +3,7 @@
 @theme {
   --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
 
   --color-bg: #F6F6FA;
   --color-surface: #FFFFFF;
