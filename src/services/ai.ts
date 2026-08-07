@@ -292,7 +292,7 @@ ${params.preferences.wishes?.trim() ? `🌟 Обязательные пожел�
       if (TEST_MODE) {
         // eslint-disable-next-line no-console
         console.error(
-          'Voyafio: proxy fetch failed. Most likely cause: the Worker\'s ALLOWED_ORIGIN doesn\'t exactly match this site\'s origin, or VITE_AI_PROXY_URL is wrong/unreachable.',
+          'Roamvas: proxy fetch failed. Most likely cause: the Worker\'s ALLOWED_ORIGIN doesn\'t exactly match this site\'s origin, or VITE_AI_PROXY_URL is wrong/unreachable.',
           '\nThis site\'s origin:', typeof window !== 'undefined' ? window.location.origin : '(unknown)',
           '\nVITE_AI_PROXY_URL:', AI_PROXY_URL || '(not set)',
           '\nOriginal error:', e
@@ -330,7 +330,7 @@ ${params.preferences.wishes?.trim() ? `🌟 Обязательные пожел�
       }
     }
     // eslint-disable-next-line no-console
-    console.error('Voyafio: не удалось разобрать ответ ИИ как JSON. Сырой ответ модели:', content);
+    console.error('Roamvas: не удалось разобрать ответ ИИ как JSON. Сырой ответ модели:', content);
     throw new Error('Нейросеть вернула некорректный формат. Попробуйте снова.');
   }
 }
