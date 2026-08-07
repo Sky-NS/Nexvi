@@ -61,13 +61,12 @@ export default function HomePage() {
     <div className="nx-fade-in max-w-4xl mx-auto px-4 py-8">
       <input ref={fileInputRef} type="file" accept=".json,application/json" onChange={handleFileSelected} className="hidden" />
 
-      <div className="relative mb-8 pt-1">
-        <div className="flex flex-col items-center gap-3">
-          <RoamvasMark className="w-16 h-16 rounded-2xl shadow-card" />
+      <div className="flex items-center justify-between mb-8 pt-1">
+        <div>
           <h1 className="sr-only">{t('app.name')}</h1>
-          <RoamvasWordmark className="h-6 w-auto" />
+          <RoamvasWordmark className="h-7 w-auto" />
         </div>
-        <div className="absolute top-0 right-0 flex items-center gap-1">
+        <div className="flex items-center gap-1 shrink-0">
           <Button variant="ghost" size="icon" onClick={handleImportClick} aria-label={t('home.importPlan')}><Upload className="w-4 h-4" /></Button>
           <Button variant="ghost" size="icon" onClick={() => navigate('/settings')}><Settings className="w-4 h-4" /></Button>
         </div>
