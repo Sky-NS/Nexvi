@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Checkbox } from '@/components/ui/Checkbox';
 import { useTranslation } from '@/i18n/LanguageContext';
-import { ChevronUp, ChevronDown, Trash2, GripVertical, MapPin, CheckCircle2, Camera, Images, Link as LinkIcon, X } from 'lucide-react';
+import { ChevronUp, ChevronDown, Trash2, Pencil, MapPin, CheckCircle2, Camera, Images, Link as LinkIcon, X } from 'lucide-react';
 import { useRef, useState } from 'react';
 
 interface Props {
@@ -83,7 +83,7 @@ export function ActivityItem({ activity, actIndex, totalActivities, currency, on
           <Button variant="ghost" size="icon" disabled={actIndex === totalActivities - 1} onClick={() => onMove(1)}><ChevronDown className="w-3 h-3" /></Button>
           <Button variant="ghost" size="icon" className="text-danger" onClick={onRemove}><Trash2 className="w-3 h-3" /></Button>
         </div>
-        <Button variant="ghost" size="icon" onClick={() => setExpanded(!expanded)} className="shrink-0"><GripVertical className={`w-4 h-4 transition-transform ${expanded ? 'rotate-90' : ''}`} /></Button>
+        <Button variant="ghost" size="icon" onClick={() => setExpanded(!expanded)} className="shrink-0" aria-label="Редактировать"><Pencil className="w-4 h-4" /></Button>
       </div>
 
       {/* Touch screens have no hover state, so give mobile a dedicated always-visible row */}
